@@ -60,7 +60,7 @@ public class Board {
 	}
 	
 	private void drop(Point pos, int spaces) {
-		board[pos.y + spaces][pos.x] = getTile(pos);
+		board[pos.y][pos.x + spaces] = getTile(pos);
 		board[pos.y][pos.x] = new Tile(' ');
 	}
 	
