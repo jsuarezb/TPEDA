@@ -14,6 +14,7 @@ public class Board {
 			for( int x = 0; x <= lastCol; x++ )
 				if( hasAdyacents(new Point(x,y)) )
 					return false;
+		
 		return true;
 	}
 	
@@ -27,7 +28,11 @@ public class Board {
 		return false;
 	}
 	
-	private Tile getTile(Point pos) {
+	public Tile getTile(Point pos) {
+		if (pos.y < 0 || pos.y >= board.length
+				|| pos.x < 0 || pos.x >= board[0].length)
+			return null;
+		
 		return board[pos.y][pos.x];
 	}
 	
@@ -60,12 +65,43 @@ public class Board {
 	}
 	
 	private void drop(Point pos, int spaces) {
-		board[pos.y][pos.x + spaces] = getTile(pos);
+		board[pos.y + spaces][pos.x] = getTile(pos);
 		board[pos.y][pos.x] = new Tile(' ');
 	}
 	
 	private void alignLeft() {
-		for( int x = 0; x <= lastCol; x++ )
-			
+		int lastCol = -1;
+		for( int x = 0; x <= lastCol; x++ ) {
+			Tile bottomTile = board[board.length - 1][x];
+			if (!bottomTile.isEmpty()){				
+				if (x - 1 >= 0 && board[board.length - 1][x - 1].isEmpty()) {
+					for (int y = board.length - 1; y >= 0; y--) {
+						board[y][lastCol + 1] = board[y][x];
+						board[y][x] = new Tile(' ');
+					}
+				}
+				
+				lastCol++;
+			}
+		}
+	}
+
+	public int delete(Point pos) {
+		int tilesModified = 0;
+		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+		Tile tile = getTile(pos), adjTile;
+		Point point;
+		
+		for (int i = 0; i < moves.length; i++) {
+			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
+			adjTile = getTile(point);
+			if (adjTile != null) {
+				if (tile.equals(adjTile)) {
+					tilesModified += delete(point);
+				}
+			}
+		}
+		
+		return tilesModified + 1;
 	}
 }
