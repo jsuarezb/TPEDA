@@ -23,8 +23,8 @@ public class GamePanel extends JPanel {
 	public GamePanel(Game game, ImageManager imgManager, final int cellSize, Color color) {
 		this.game = game;
 		this.imgManager = imgManager;
-		this.rows = game.getWidthSize();
-		this.columns = game.getHeightSize();
+		this.rows = game.getHeightSize();
+		this.columns = game.getWidthSize();
 		this.images = new Image[rows][columns];
 		this.cellSize = cellSize;
 		this.color = color;
@@ -51,10 +51,10 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void refresh() {
-		for(int i = 0; i < game.getWidthSize(); i++){
-			for(int j = 0; j < game.getHeightSize(); j++) {
-				Tile tile = game.getTile(new Point(i,j));
-				put(imgManager.get(tile), i, j);
+		for(int x = 0; x < game.getWidthSize(); x++){
+			for(int y = 0; y < game.getHeightSize(); y++) {
+				Tile tile = game.getTile(new Point(x,y));
+				put(imgManager.get(tile), y, x);
 			}
 		}
 		repaint();
@@ -63,6 +63,6 @@ public class GamePanel extends JPanel {
 	public Point getTilePosition(int x, int y) {
 		int tileX = (int) Math.ceil(x/cellSize);
 		int tileY =(int) Math.ceil(y/cellSize);
-		return new Point(tileX, tileY);
+		return new Point(tileY, tileX);
 	}
 }

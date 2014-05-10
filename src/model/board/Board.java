@@ -1,6 +1,8 @@
 package model.board;
 import java.awt.Point;
 
+import model.board.Tile.Color;
+
 public class Board {
 	private Tile[][] board;
 	private int lastCol;
@@ -66,7 +68,7 @@ public class Board {
 
 	private void drop(Point pos, int spaces) {
 		board[pos.y + spaces][pos.x] = getTile(pos);
-		board[pos.y][pos.x] = new Tile(' ');
+		board[pos.y][pos.x] = new Tile(Color.EMPTY);
 	}
 
 	private void alignLeft() {
@@ -77,7 +79,7 @@ public class Board {
 				if (x - 1 >= 0 && board[board.length - 1][x - 1].isEmpty()) {
 					for (int y = board.length - 1; y >= 0; y--) {
 						board[y][lastCol + 1] = board[y][x];
-						board[y][x] = new Tile(' ');
+						board[y][x] = new Tile(Color.EMPTY);
 					}
 				}
 
@@ -122,7 +124,7 @@ public class Board {
 				tilesModified += delete(point);
 		}
 
-		board[pos.y][pos.y] = new Tile(' ');
+		board[pos.y][pos.y] = new Tile(Color.EMPTY);
 
 		return tilesModified + 1;
 	}
