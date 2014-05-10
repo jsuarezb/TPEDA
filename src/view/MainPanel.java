@@ -32,7 +32,6 @@ public class MainPanel extends JPanel{
 		add(infoPanel = new InfoPanel(game, imgManager, CELL_SIZE * game.getWidthSize(), INFO_WIDTH, height));
 		add(gPanel = new GamePanel(game, imgManager, CELL_SIZE, Color.BLACK));
 		setSize(CELL_SIZE * game.getWidthSize() + INFO_WIDTH, height);
-		System.out.println(CELL_SIZE * game.getWidthSize() + INFO_WIDTH + " " + height);
 		refresh();
 		
 		addMouseListener(new MouseAdapter() {

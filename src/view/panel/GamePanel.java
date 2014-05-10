@@ -28,7 +28,6 @@ public class GamePanel extends JPanel {
 		this.images = new Image[rows][columns];
 		this.cellSize = cellSize;
 		this.color = color;
-		System.out.println(columns * cellSize + " " + rows * cellSize);
 		setSize(columns * cellSize, rows * cellSize);
 	}
 
