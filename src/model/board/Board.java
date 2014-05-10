@@ -119,8 +119,9 @@ public class Board {
 	}
 
 	private void alignLeft() {
-		int lastCol = -1;
-		for( int x = 0; x <= lastCol; x++ ) {
+		int auxCol = lastCol;
+		lastCol = -1;
+		for( int x = 0; x <= auxCol; x++ ) {
 			Tile bottomTile = board[board.length - 1][x];
 			if (!bottomTile.isEmpty()){				
 				if (x - 1 >= 0 && board[board.length - 1][x - 1].isEmpty()) {
