@@ -54,6 +54,7 @@ public class Board {
 	public void play(Point pos){
 		delete(pos);
 		gravity();
+		alignLeft();
 	}
 	
 	private int delete(Point pos) {
