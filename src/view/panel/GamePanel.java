@@ -32,7 +32,7 @@ public class GamePanel extends JPanel {
 	}
 
 	public void put(Image image, int row, int column) {
-		images[row][column] = image;
+		images[column][row] = image;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class GamePanel extends JPanel {
 		for(int x = 0; x < game.getWidthSize(); x++){
 			for(int y = 0; y < game.getHeightSize(); y++) {
 				Tile tile = game.getTile(new Point(x,y));
-				put(imgManager.get(tile), y, x);
+				put(imgManager.get(tile), x, y);
 			}
 		}
 		repaint();

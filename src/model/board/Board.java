@@ -6,6 +6,7 @@ import model.board.Tile.Color;
 public class Board {
 	private Tile[][] board;
 	private int lastCol;
+	private static final int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 
 	public Board( Tile[][] board ) {
 		this.board = board;
@@ -31,15 +32,19 @@ public class Board {
 		return false;
 	}
 
-	public Tile getTile(Point pos) { // TODO: Derivar a getTile(x,y) ?
-		if (pos.y < 0 || pos.y >= board.length
-				|| pos.x < 0 || pos.x >= board[0].length)
+	public Tile getTile(Point pos) {
+		return getTile(pos.x, pos.y);
+	}
+	
+	private Tile getTile(int x, int y) {
+		if (y < 0 || y >= board.length
+				|| x < 0 || x >= board[0].length)
 			return null;
 
-		return board[pos.y][pos.x];
+		return board[y][x];
 	}
-
-	private Tile getRight(Point pos) { // TODO: Reconsider with getTop.
+	
+	private Tile getRight(Point pos) {
 		if( pos.x + 1 >= board[0].length )
 			return null;
 		return board[pos.y][pos.x + 1];
@@ -51,6 +56,12 @@ public class Board {
 		return board[pos.y - 1][pos.x];
 	}
 
+	private Tile getLeft(Point pos) {
+		if( pos.x - 1 < 0 )
+			return null;
+		return board[pos.y][pos.x - 1];
+	}
+	
 	public void play(Point pos){
 		if( getTile(pos).isEmpty() )
 				return;
@@ -61,7 +72,6 @@ public class Board {
 	
 	private int delete(Point pos) {
 		boolean hasAdj = false;
-		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} }; // TODO:  moves static.
 		Tile tile = getTile(pos);
 
 		for (int i = 0; i < moves.length && !hasAdj; i++) {
@@ -77,8 +87,7 @@ public class Board {
 	}
 
 	private int deleteTile(Point pos) {
-		int tilesModified = 0;
-		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+		int tilesDeleted = 0;
 		Point point;
 		Tile tile = getTile(pos), adjTile;
 		board[pos.y][pos.x] = new Tile(Color.EMPTY);
@@ -88,10 +97,10 @@ public class Board {
 			adjTile = getTile(point);
 
 			if (tile.equals(adjTile))
-				tilesModified += deleteTile(point);
+				tilesDeleted += deleteTile(point);
 		}
 		
-		return tilesModified + 1;
+		return tilesDeleted + 1;
 	}
 	
 	private void gravity() {
@@ -115,14 +124,18 @@ public class Board {
 		board[pos.y][pos.x] = new Tile(Color.EMPTY);
 	}
 
-	private void alignLeft() { // TODO: use getTile?
+	private void alignLeft() {
 		int auxCol = lastCol;
 		lastCol = -1;
 		
 		for( int x = 0; x <= auxCol; x++ ) {
-			Tile bottomTile = board[board.length - 1][x];
-			if (!bottomTile.isEmpty()){				
-				if (x - 1 >= 0 && board[board.length - 1][x - 1].isEmpty())
+			Point tilePos = new Point(x, board.length - 1);
+			Tile bottomTile = getTile(tilePos);
+			
+			if (!bottomTile.isEmpty()){	
+				Tile leftTile = getLeft(tilePos);
+				
+				if (leftTile != null && leftTile.isEmpty())
 					for (int y = board.length - 1; y >= 0; y--) {
 						board[y][lastCol + 1] = board[y][x];
 						board[y][x] = new Tile(Color.EMPTY);
