@@ -9,6 +9,7 @@ public class Board {
 
 	public Board( Tile[][] board ) {
 		this.board = board;
+		this.lastCol = board[0].length - 1;
 	}
 
 	public boolean isOver() {
@@ -105,7 +106,7 @@ public class Board {
 
 				if( tile.isEmpty() )
 					spaces++;
-				else
+				else if( spaces > 0 )
 					drop(pos, spaces);
 			}
 		}
