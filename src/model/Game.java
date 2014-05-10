@@ -14,8 +14,9 @@ public class Game {
 		Tile[][] tiles = {{new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.GREEN)}, 
 						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.BLUE)},
 						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.GREEN)},
-						  {new Tile(Color.RED), new Tile(Color.RED), new Tile(Color.YELLOW)},
-						  {new Tile(Color.RED), new Tile(Color.RED), new Tile(Color.YELLOW)}};
+						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.YELLOW)},
+						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.YELLOW)},
+						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.YELLOW)}};
 		board = new Board(tiles);
 	}
 

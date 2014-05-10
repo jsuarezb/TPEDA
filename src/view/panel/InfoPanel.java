@@ -16,12 +16,11 @@ public class InfoPanel extends JPanel {
 	private Game game;
 	private ScorePanel scorePanel;
 	
-	public InfoPanel(Game game, ImageManager imgManager, int width, int height) {
+	public InfoPanel(Game game, ImageManager imgManager, int xPos, int width, int height) {
 		this.game = game;
 		
 		setBackground(Color.GRAY);
-		setBounds(height, 1, width, height);
-		setLayout(new FlowLayout());
+		setBounds(xPos, 0, width, height);
 		scorePanel = new ScorePanel(game);
 		scorePanel.setVisible(true);
 		add(scorePanel);
