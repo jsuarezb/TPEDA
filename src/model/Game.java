@@ -36,6 +36,7 @@ public class Game {
 	public boolean playerWon() {
 		return board.playerWon();
 	}
+<<<<<<< HEAD
 
 	public int getPlayer1Score() {
 		return player1Score;
@@ -44,4 +45,7 @@ public class Game {
 	public int getPlayer2Score() {
 		return player2Score;
 	}
+=======
+	
+>>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 }

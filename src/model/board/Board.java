@@ -14,7 +14,11 @@ public class Board {
 			for( int x = 0; x <= lastCol; x++ )
 				if( hasAdyacents(new Point(x,y)) )
 					return false;
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 		return true;
 	}
 
@@ -27,12 +31,20 @@ public class Board {
 			return true;
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 	public Tile getTile(Point pos) {
 		if (pos.y < 0 || pos.y >= board.length
 				|| pos.x < 0 || pos.x >= board[0].length)
 			return null;
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 		return board[pos.y][pos.x];
 	}
 
@@ -80,7 +92,11 @@ public class Board {
 						board[y][x] = new Tile(' ');
 					}
 				}
+<<<<<<< HEAD
 
+=======
+				
+>>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 				lastCol++;
 			}
 		}
@@ -91,14 +107,22 @@ public class Board {
 		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 		Point point;
 		Tile tile = getTile(pos);
+<<<<<<< HEAD
 
 		if (tile == null || tile.isEmpty())
 			throw new IllegalArgumentException("Invalid tile");
 
+=======
+		
+		if (tile == null || tile.isEmpty())
+			throw new IllegalArgumentException("Invalid tile");
+		
+>>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 		for (int i = 0; i < moves.length && !hasAdj; i++) {
 			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
 			if (tile.equals(getTile(point)))
 				hasAdj = true;
+<<<<<<< HEAD
 
 		}
 
@@ -108,12 +132,27 @@ public class Board {
 		return deleteTile(pos);
 	}
 
+=======
+		
+		}
+		
+		if (!hasAdj)
+			return 0;
+		
+		return deleteTile(pos);
+	}
+	
+>>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 	private int deleteTile(Point pos) {
 		int tilesModified = 0;
 		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 		Point point;
 		Tile tile = getTile(pos), adjTile;
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 		for (int i = 0; i < moves.length; i++) {
 			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
 			adjTile = getTile(point);
@@ -123,7 +162,11 @@ public class Board {
 				}
 			}
 		}
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 		return tilesModified + 1;
 	}
 }
