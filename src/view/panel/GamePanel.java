@@ -63,6 +63,9 @@ public class GamePanel extends JPanel {
 	public Point getTilePosition(int x, int y) {
 		int tileX = (int) Math.ceil(x/cellSize);
 		int tileY =(int) Math.ceil(y/cellSize);
-		return new Point(tileY, tileX);
+		Point tilePos = new Point(tileY, tileX);
+		if( game.getTile(tilePos) == null )
+			return null;
+		return tilePos;
 	}
 }

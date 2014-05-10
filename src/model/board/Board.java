@@ -115,7 +115,8 @@ public class Board {
 		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 		Point point;
 		Tile tile = getTile(pos), adjTile;
-
+		board[pos.y][pos.x] = new Tile(Color.EMPTY);
+		
 		for (int i = 0; i < moves.length; i++) {
 			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
 			adjTile = getTile(point);
@@ -123,9 +124,7 @@ public class Board {
 			if (adjTile != null && tile.equals(adjTile))
 				tilesModified += delete(point);
 		}
-
-		board[pos.y][pos.y] = new Tile(Color.EMPTY);
-
+		System.out.println("hola :)"); //TODO: Borrar!
 		return tilesModified + 1;
 	}
 
