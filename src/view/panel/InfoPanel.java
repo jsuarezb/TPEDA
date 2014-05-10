@@ -38,11 +38,10 @@ public class InfoPanel extends JPanel {
 			Font plain = new Font("Arial", Font.BOLD, 12);
 			g.setFont(plain);
 			
-			if (game.playerWon()) {
-				g.drawString("Game Over - Player WON !!!", 10, 140);
-			} else {
-				g.drawString("Game Over - Player DIED !!!", 10, 140);
-			}
+			if (game.playerWon())
+				g.drawString("Game Over - Player1 WON !!!", 10, 140);
+			else
+				g.drawString("Game Over - Player1 LOSE !!!", 10, 140);
 		}
 	}	
 }
