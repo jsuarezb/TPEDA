@@ -117,13 +117,26 @@ public class Board {
 		for (int i = 0; i < moves.length; i++) {
 			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
 			adjTile = getTile(point);
-			if (adjTile != null) {
-				if (tile.equals(adjTile)) {
-					tilesModified += delete(point);
-				}
-			}
+
+			if (adjTile != null && tile.equals(adjTile))
+				tilesModified += delete(point);
 		}
 
+		board[pos.y][pos.y] = new Tile(' ');
+
 		return tilesModified + 1;
+	}
+
+	public int getWidthSize() {
+		return board[0].length;
+	}
+
+	public int getHeightSize() {
+		return board.length;
+	}
+
+	public boolean playerWon() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

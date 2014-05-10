@@ -10,6 +10,11 @@ public class Game {
 	private int player1Score;
 
 	public Game() {
+		Tile[][] tiles = {{new Tile(' '), new Tile(' '), new Tile(' ')}, 
+						  {new Tile(' '), new Tile(' '), new Tile(' ')},
+						  {new Tile(' '), new Tile(' '), new Tile(' ')},
+						  {new Tile(' '), new Tile(' '), new Tile(' ')}};
+		board = new Board(tiles);
 	}
 
 	public Tile getTile(Point p){
@@ -25,7 +30,7 @@ public class Game {
 	}
 	
 	public int getHeightSize(){
-		return board.getWidthSize();
+		return board.getHeightSize();
 	}
 	
 	public boolean isOver() {
