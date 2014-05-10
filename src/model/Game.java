@@ -22,8 +22,8 @@ public class Game {
 		return board.getTile(p);
 	}
 	
-	public void delete(Point tilePos) {
-		board.delete(tilePos);
+	public void play(Point tilePos) {
+		board.play(tilePos);
 	}
 	
 	public int getWidthSize(){

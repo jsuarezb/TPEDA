@@ -40,7 +40,7 @@ public class MainPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				Point tilePos = MainPanel.this.getTilePosition(e.getX(), e.getY());
 				if( tilePos != null ){
-					MainPanel.this.game.delete(tilePos);
+					MainPanel.this.game.play(tilePos);
 					MainPanel.this.refresh();
 				}
 			}

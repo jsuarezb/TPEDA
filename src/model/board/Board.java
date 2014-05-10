@@ -50,45 +50,12 @@ public class Board {
 		return board[pos.y - 1][pos.x];
 	}
 
-	private void gravity() {
-		for( int x = 0; x <= lastCol; x++ ){
-			int spaces = 0;
-
-			for( int y = board.length - 1; y >= 0; y-- ){
-				Point pos = new Point(x,y);
-				Tile tile = getTile(pos);
-
-				if( tile.isEmpty() )
-					spaces++;
-				else
-					drop(pos, spaces);
-			}
-		}
+	public void play(Point pos){
+		delete(pos);
+		gravity();
 	}
-
-	private void drop(Point pos, int spaces) {
-		board[pos.y + spaces][pos.x] = getTile(pos);
-		board[pos.y][pos.x] = new Tile(Color.EMPTY);
-	}
-
-	private void alignLeft() {
-		int lastCol = -1;
-		for( int x = 0; x <= lastCol; x++ ) {
-			Tile bottomTile = board[board.length - 1][x];
-			if (!bottomTile.isEmpty()){				
-				if (x - 1 >= 0 && board[board.length - 1][x - 1].isEmpty()) {
-					for (int y = board.length - 1; y >= 0; y--) {
-						board[y][lastCol + 1] = board[y][x];
-						board[y][x] = new Tile(Color.EMPTY);
-					}
-				}
-
-				lastCol++;
-			}
-		}
-	}
-
-	public int delete(Point pos) {
+	
+	private int delete(Point pos) {
 		boolean hasAdj = false;
 		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 		Point point;
@@ -126,6 +93,44 @@ public class Board {
 		}
 		System.out.println("hola :)"); //TODO: Borrar!
 		return tilesModified + 1;
+	}
+	
+	private void gravity() {
+		for( int x = 0; x <= lastCol; x++ ){
+			int spaces = 0;
+
+			for( int y = board.length - 1; y >= 0; y-- ){
+				Point pos = new Point(x,y);
+				Tile tile = getTile(pos);
+
+				if( tile.isEmpty() )
+					spaces++;
+				else
+					drop(pos, spaces);
+			}
+		}
+	}
+
+	private void drop(Point pos, int spaces) {
+		board[pos.y + spaces][pos.x] = getTile(pos);
+		board[pos.y][pos.x] = new Tile(Color.EMPTY);
+	}
+
+	private void alignLeft() {
+		int lastCol = -1;
+		for( int x = 0; x <= lastCol; x++ ) {
+			Tile bottomTile = board[board.length - 1][x];
+			if (!bottomTile.isEmpty()){				
+				if (x - 1 >= 0 && board[board.length - 1][x - 1].isEmpty()) {
+					for (int y = board.length - 1; y >= 0; y--) {
+						board[y][lastCol + 1] = board[y][x];
+						board[y][x] = new Tile(Color.EMPTY);
+					}
+				}
+
+				lastCol++;
+			}
+		}
 	}
 
 	public int getWidthSize() {
