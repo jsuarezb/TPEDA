@@ -122,7 +122,7 @@ public class Board {
 			adjTile = getTile(point);
 
 			if (adjTile != null && tile.equals(adjTile))
-				tilesModified += delete(point);
+				tilesModified += deleteTile(point);
 		}
 		System.out.println("hola :)"); //TODO: Borrar!
 		return tilesModified + 1;
