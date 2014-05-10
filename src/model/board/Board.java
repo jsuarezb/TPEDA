@@ -52,6 +52,8 @@ public class Board {
 	}
 
 	public void play(Point pos){
+		if( getTile(pos).isEmpty() )
+				return;
 		delete(pos);
 		gravity();
 		alignLeft();
@@ -61,9 +63,6 @@ public class Board {
 		boolean hasAdj = false;
 		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} }; // TODO:  moves static.
 		Tile tile = getTile(pos);
-
-		if (tile == null || tile.isEmpty()) // TODO: Remove?
-			throw new IllegalArgumentException("Invalid tile");
 
 		for (int i = 0; i < moves.length && !hasAdj; i++) {
 			Point point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
