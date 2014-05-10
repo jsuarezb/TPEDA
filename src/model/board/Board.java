@@ -87,10 +87,32 @@ public class Board {
 	}
 
 	public int delete(Point pos) {
+		boolean hasAdj = false;
+		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+		Point point;
+		Tile tile = getTile(pos);
+		
+		if (tile == null || tile.isEmpty())
+			throw new IllegalArgumentException("Invalid tile");
+		
+		for (int i = 0; i < moves.length && !hasAdj; i++) {
+			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
+			if (tile.equals(getTile(point)))
+				hasAdj = true;
+		
+		}
+		
+		if (!hasAdj)
+			return 0;
+		
+		return deleteTile(pos);
+	}
+	
+	private int deleteTile(Point pos) {
 		int tilesModified = 0;
 		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
-		Tile tile = getTile(pos), adjTile;
 		Point point;
+		Tile tile = getTile(pos), adjTile;
 		
 		for (int i = 0; i < moves.length; i++) {
 			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
