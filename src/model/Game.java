@@ -8,9 +8,8 @@ public class Game {
 	private Board board;
 	private int player2Score;
 	private int player1Score;
-	
-	public <T> Game(Class<T> boardClass) throws InstantiationException, IllegalAccessException {
-		this.board = (Board)boardClass.newInstance();
+
+	public Game() {
 	}
 
 	public Tile getTile(Point p){
@@ -18,7 +17,7 @@ public class Game {
 	}
 	
 	public void delete(Point tilePos) {
-		board.delete(Point tilePos);
+		board.delete(tilePos);
 	}
 	
 	public int getWidthSize(){
@@ -30,13 +29,12 @@ public class Game {
 	}
 	
 	public boolean isOver() {
-		return board.gameOver();
+		return board.isOver();
 	}
 	
 	public boolean playerWon() {
 		return board.playerWon();
 	}
-<<<<<<< HEAD
 
 	public int getPlayer1Score() {
 		return player1Score;
@@ -45,7 +43,4 @@ public class Game {
 	public int getPlayer2Score() {
 		return player2Score;
 	}
-=======
-	
->>>>>>> 95011e468b595b87dd0e572a087ede20396ace5e
 }
