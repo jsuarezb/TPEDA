@@ -31,7 +31,7 @@ public class Board {
 		return false;
 	}
 
-	public Tile getTile(Point pos) {
+	public Tile getTile(Point pos) { // TODO: Derivar a getTile(x,y) ?
 		if (pos.y < 0 || pos.y >= board.length
 				|| pos.x < 0 || pos.x >= board[0].length)
 			return null;
@@ -39,7 +39,7 @@ public class Board {
 		return board[pos.y][pos.x];
 	}
 
-	private Tile getRight(Point pos) {
+	private Tile getRight(Point pos) { // TODO: Reconsider with getTop.
 		if( pos.x + 1 >= board[0].length )
 			return null;
 		return board[pos.y][pos.x + 1];
@@ -59,18 +59,16 @@ public class Board {
 	
 	private int delete(Point pos) {
 		boolean hasAdj = false;
-		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
-		Point point;
+		int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} }; // TODO:  moves static.
 		Tile tile = getTile(pos);
 
-		if (tile == null || tile.isEmpty())
+		if (tile == null || tile.isEmpty()) // TODO: Remove?
 			throw new IllegalArgumentException("Invalid tile");
 
 		for (int i = 0; i < moves.length && !hasAdj; i++) {
-			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
+			Point point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
 			if (tile.equals(getTile(point)))
 				hasAdj = true;
-
 		}
 
 		if (!hasAdj)
@@ -90,9 +88,10 @@ public class Board {
 			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
 			adjTile = getTile(point);
 
-			if (adjTile != null && tile.equals(adjTile))
+			if (tile.equals(adjTile))
 				tilesModified += deleteTile(point);
 		}
+		
 		return tilesModified + 1;
 	}
 	
@@ -117,19 +116,18 @@ public class Board {
 		board[pos.y][pos.x] = new Tile(Color.EMPTY);
 	}
 
-	private void alignLeft() {
+	private void alignLeft() { // TODO: use getTile?
 		int auxCol = lastCol;
 		lastCol = -1;
+		
 		for( int x = 0; x <= auxCol; x++ ) {
 			Tile bottomTile = board[board.length - 1][x];
 			if (!bottomTile.isEmpty()){				
-				if (x - 1 >= 0 && board[board.length - 1][x - 1].isEmpty()) {
+				if (x - 1 >= 0 && board[board.length - 1][x - 1].isEmpty())
 					for (int y = board.length - 1; y >= 0; y--) {
 						board[y][lastCol + 1] = board[y][x];
 						board[y][x] = new Tile(Color.EMPTY);
 					}
-				}
-
 				lastCol++;
 			}
 		}
