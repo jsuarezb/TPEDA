@@ -11,12 +11,12 @@ public class Game {
 	private int player1Score;
 
 	public Game() {
-		Tile[][] tiles = {{new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.GREEN)}, 
-						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.BLUE)},
-						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.GREEN)},
-						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.YELLOW)},
-						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.YELLOW)},
-						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.YELLOW)}};
+		Tile[][] tiles = {{new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.GREEN), new Tile(Color.GREEN)},  
+						  {new Tile(Color.GREEN), new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.GREEN)},
+						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.GREEN), new Tile(Color.GREEN)},
+						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.YELLOW), new Tile(Color.GREEN)},
+						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.YELLOW), new Tile(Color.GREEN)},
+						  {new Tile(Color.RED), new Tile(Color.BLUE), new Tile(Color.YELLOW), new Tile(Color.GREEN)}};
 		board = new Board(tiles);
 	}
 
