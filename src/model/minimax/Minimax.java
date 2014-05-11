@@ -11,7 +11,7 @@ public class Minimax {
 	
 	public Point minimax(Game game){	
 		Node<Game> root = new Node<Game>(game);
-		double value = minimax(root, 3);
+		double value = minimax(root, 8);
 		for( Node<Game> son: root.sons )
 			if( son.value == value )
 				return son.play;
@@ -19,10 +19,14 @@ public class Minimax {
 	}
 	
 	public double minimax(Node<Game> node, int height){
+		long miniTime = System.nanoTime();
 		Game game = node.getElem();
 		double value;
 		if( height == 0 || game.isOver() ){
 			node.setValue(heuristic(game));
+			long minFTime = System.nanoTime();
+			long minTime = minFTime - miniTime;
+			System.out.println("HeurTime: " + minTime);
 			return node.value;
 		}
 		
@@ -36,18 +40,20 @@ public class Minimax {
 		List<Group> groups = game.getGroups();
 		long gfT = System.nanoTime();
 		long gT = gfT - giT;
-		for(Group group: groups ){
+		long piT = System.nanoTime();
+		for(Group group: groups){
 			Game gameCopy = game.clone();
 			Point play = group.getPoint();
-			long piT = System.nanoTime();
 			gameCopy.play(play);
-			long pfT = System.nanoTime();
-			long pT = pfT - piT;
-			System.out.println("Group time: " + gT + " Play time: " + pT);
 			if( !games.contains(gameCopy) && !gameCopy.equals(game)){
 				games.add(gameCopy);
 				Node<Game> newNode = new Node<Game>(gameCopy, play);
 				node.addSon(newNode);
+				long pfT = System.nanoTime();
+				long pT = pfT - piT;
+				long minFTime = System.nanoTime();
+				long minTime = minFTime - miniTime;
+				System.out.println("MinTime: " + minTime + " XTime: " + pT + " groupTime: " + gT);
 				if( game.isPlayer1Turn() )
 					value = Math.min(value, minimax(newNode, height - 1));
 				else

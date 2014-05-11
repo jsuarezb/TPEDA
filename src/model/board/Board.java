@@ -2,7 +2,9 @@ package model.board;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import model.board.Tile.Color;
 import model.minimax.Group;
@@ -11,7 +13,7 @@ public class Board {
 	private Tile[][] board;
 	private int lastCol;
 	private int lastRow;
-	private static final int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+	public static final int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 
 	public Board( Tile[][] board ) {
 		this(board, 0, board[0].length - 1);
@@ -23,7 +25,7 @@ public class Board {
 		this.lastCol = lastCol;
 	}
 
-	public List<Group> getGroups() {
+	/*public List<Group> getGroups() {
 		List<Group> groups = new ArrayList<Group>();
 		for( int y = lastRow; y < board.length; y++ )
 			for( int x = 0; x < lastCol; x++ ){
@@ -38,6 +40,25 @@ public class Board {
 						}
 					if(!added)
 						groups.add(new Group(tile, pos));
+				}
+			}
+		return groups;
+	}*/
+	
+	public List<Group> getGroups() {
+		List<Group> groups = new ArrayList<Group>();
+		Set<Point> pointSet = new HashSet<Point>();
+		for( int y = lastRow; y < board.length; y++ )
+			for( int x = 0; x < lastCol; x++ ){
+				Point pos = new Point(x,y);
+				if( !pointSet.contains(pos) ){
+					Tile tile = getTile(pos);
+					if( !tile.isEmpty() && hasAnyAdjacents(pos) ){
+						Group group = new Group(tile, pos);
+						Set<Point> newPoints = group.completeGroup(this);
+						pointSet.addAll(newPoints);
+						groups.add(group);
+					}
 				}
 			}
 		return groups;
