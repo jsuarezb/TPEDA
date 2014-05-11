@@ -1,8 +1,11 @@
 package model.board;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import model.board.Tile.Color;
+import model.minimax.Group;
 
 public class Board {
 	private Tile[][] board;
@@ -20,6 +23,26 @@ public class Board {
 		this.lastCol = lastCol;
 	}
 
+	public List<Group> getGroups() {
+		List<Group> groups = new ArrayList<Group>();
+		for( int y = lastRow; y < board.length; y++ )
+			for( int x = 0; x < lastCol; x++ ){
+				Point pos = new Point(x,y);
+				Tile tile = getTile(pos);
+				if( !tile.isEmpty() && hasAnyAdjacents(pos) ){
+					boolean added = false;
+					for(Group group: groups )
+						if( group.shouldContain(tile, pos) ){
+							group.addPoint(pos);
+							added = true;
+						}
+					if(!added)
+						groups.add(new Group(tile, pos));
+				}
+			}
+		return groups;
+	}
+	
 	public boolean isOver() {
 		for( int y = board.length - 1; y >= lastRow; y-- )
 			for( int x = 0; x <= lastCol; x++ )
@@ -39,6 +62,21 @@ public class Board {
 		return false;
 	}
 
+	public boolean hasAnyAdjacents(Point pos) {
+		Tile tile = getTile(pos);
+		if( tile.isEmpty() )
+			return false;
+		if( tile.equals(getRight(pos)) )
+			return true;
+		if( tile.equals(getTop(pos)) )
+			return true;
+		if( tile.equals(getLeft(pos)) )
+			return true;
+		if( tile.equals(getBottom(pos)) )
+			return true;
+		return false;
+	}
+	
 	public boolean isEmpty(){
 		return lastCol == -1 && lastRow == board.length;
 	}
@@ -71,22 +109,17 @@ public class Board {
 		return board[pos.y][pos.x - 1];
 	}
 	
-	public int play(Point pos){
-		Board b = this.clone(); //TODO: Remove.
-		
+	private Tile getBottom(Point pos) {
+		if( pos.y + 1 >= board.length )
+			return null;
+		return board[pos.y + 1][pos.x];
+	}
+	
+	public int play(Point pos){		
 		int tilesDeleted = delete(pos);
 		if( tilesDeleted == 0 )
-			return 0;
-		
-		long iGTime = System.nanoTime(); //TODO: Remove timer. Keep control of it.
-		gravity();		
-		long fGTime = System.nanoTime();
-		long gTime = fGTime - iGTime; 
-		System.out.println("GravityTime: " + gTime); 
-		
-		if( gTime > 1000000 )
-			System.out.println("Initial Board: \n" + b + "\n Final Board: \n" + this);
-		
+			return 0;		
+		gravity();				
 		alignLeft();
 		return tilesDeleted;
 	}
@@ -125,7 +158,6 @@ public class Board {
 	}
 	
 	private void gravity() {
-		long iGTime = System.nanoTime();
 		int auxRow = lastRow;
 		lastRow = board.length;
 		for( int x = 0; x <= lastCol; x++ ){
@@ -142,9 +174,6 @@ public class Board {
 			}
 			lastRow = Math.min(lastRow, spaces + auxRow);
 		}
-		long fGTime = System.nanoTime();
-		long gTime = fGTime - iGTime; 
-		System.out.println("InsideGravityTime " + gTime);
 	}
 	
 	private void drop(Point pos, int spaces) {
@@ -228,4 +257,5 @@ public class Board {
 		}
 		return ans;
 	}
+
 }

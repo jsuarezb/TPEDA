@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import model.Game;
 
 public class Minimax {
 	
 	public Point minimax(Game game){	
 		Node<Game> root = new Node<Game>(game);
-		double value = minimax(root, 4);
+		double value = minimax(root, 3);
 		for( Node<Game> son: root.sons )
 			if( son.value == value )
 				return son.play;
@@ -33,21 +32,28 @@ public class Minimax {
 			value = Double.NEGATIVE_INFINITY;
 		
 		Set<Game> games = new HashSet<Game>();
-		for(int x = 0; x <= game.getLastCol(); x++)
-			for(int y = game.getHeightSize() - 1; y >= game.getLastRow(); y--){
-				Game gameCopy = game.clone();
-				Point play = new Point(x,y);
-				gameCopy.play(play);
-				if( !games.contains(gameCopy) && !gameCopy.equals(game)){
-					games.add(gameCopy);
-					Node<Game> newNode = new Node<Game>(gameCopy, play);
-					node.addSon(newNode);
-					if( game.isPlayer1Turn() )
-						value = Math.min(value, minimax(newNode, height - 1));
-					else
-						value = Math.max(value, minimax(newNode, height - 1));
-				}
+		long giT = System.nanoTime();
+		List<Group> groups = game.getGroups();
+		long gfT = System.nanoTime();
+		long gT = gfT - giT;
+		for(Group group: groups ){
+			Game gameCopy = game.clone();
+			Point play = group.getPoint();
+			long piT = System.nanoTime();
+			gameCopy.play(play);
+			long pfT = System.nanoTime();
+			long pT = pfT - piT;
+			System.out.println("Group time: " + gT + " Play time: " + pT);
+			if( !games.contains(gameCopy) && !gameCopy.equals(game)){
+				games.add(gameCopy);
+				Node<Game> newNode = new Node<Game>(gameCopy, play);
+				node.addSon(newNode);
+				if( game.isPlayer1Turn() )
+					value = Math.min(value, minimax(newNode, height - 1));
+				else
+					value = Math.max(value, minimax(newNode, height - 1));
 			}
+		}
 		node.setValue(value);
 		return value;
 	}

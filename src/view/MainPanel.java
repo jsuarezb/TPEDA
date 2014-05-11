@@ -43,9 +43,8 @@ public class MainPanel extends JPanel{
 	    		MainPanel mPanel = MainPanel.this;
 				if(!mPanel.game.isOver()){
 					Point tilePos = mPanel.getTilePosition(e.getX(), e.getY());
-					if( tilePos != null && MainPanel.this.game.isPlayer1Turn() ){
+					if( tilePos != null && MainPanel.this.game.isPlayer1Turn() )
 						mPanel.game.play(tilePos);
-					}
 					else if( tilePos != null && MainPanel.this.game.isPlayer2Turn() ){
 						Point pos =  MainPanel.this.minimax.minimax(MainPanel.this.game);
 						MainPanel.this.game.play(pos);			

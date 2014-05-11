@@ -1,9 +1,11 @@
 package model;
 import java.awt.Point;
+import java.util.List;
 
 import model.board.Board;
 import model.board.Tile;
 import model.board.Tile.Color;
+import model.minimax.Group;
 
 public class Game {
 	private Board board;
@@ -12,9 +14,9 @@ public class Game {
 	private int turn;
 	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET, Color.ORANGE,
 							  Color.GRAY, Color.PINK, Color.BROWN};
-	private static int COLORS = 9;
-	private static int ROWS = 15;
-	private static int COLS = 15;
+	private static int COLORS = 4;
+	private static int ROWS = 8;
+	private static int COLS = 8;
 	
 	public Game() {
 		Tile[][] tiles = randomGame();
@@ -40,6 +42,10 @@ public class Game {
 	
 	public Board getBoard() {
 		return board;
+	}
+	
+	public List<Group> getGroups(){
+		return board.getGroups();
 	}
 	
 	public Tile getTile(Point p){
