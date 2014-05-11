@@ -4,23 +4,41 @@ import java.awt.Point;
 import model.board.Board;
 import model.board.Tile;
 import model.board.Tile.Color;
+import model.minimax.Minimax;
 
 public class Game {
 	private Board board;
-	private int player2Score;
 	private int player1Score;
+	private int player2Score;
 	private int turn;
-
+	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET, Color.ORANGE,
+							  Color.GRAY, Color.PINK, Color.BROWN};
+	private static int COLORS = 3;
+	private static int ROWS = 7;
+	private static int COLS = 7;
+	
 	public Game() {
-		Tile[][] tiles = {{new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.GREEN), new Tile(Color.GREEN)},  
-						  {new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.GREEN)},
-						  {new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.GREEN), new Tile(Color.GREEN)},
-						  {new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.YELLOW), new Tile(Color.GREEN)},
-						  {new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.YELLOW), new Tile(Color.GREEN)},
-						  {new Tile(Color.BLUE), new Tile(Color.BLUE), new Tile(Color.YELLOW), new Tile(Color.GREEN)}};
+		Tile[][] tiles = randomGame();
 		board = new Board(tiles);
 	}
+	
+	private Tile[][] randomGame(){
+		Tile[][] tiles = new Tile[ROWS][COLS];
+		for( int i = 0; i < ROWS; i++)
+			for(int j = 0; j < COLS; j++){
+				int val = (int)(Math.random()*COLORS); 
+				tiles[i][j] = new Tile(colors[val]);
+			}
+		return tiles;
+	}
 
+	public Game(Board board, int player1Score, int player2Score, int turn){
+		this.board = board;
+		this.player1Score = player1Score;
+		this.player2Score = player2Score;
+		this.turn = turn;
+	}
+	
 	public Board getBoard() {
 		return board;
 	}
@@ -33,6 +51,8 @@ public class Game {
 		if( getTile(tilePos).isEmpty() )
 			return;
 		int tilesDeleted = board.play(tilePos);
+		if( tilesDeleted == 0 )
+			return;
 		score(tilesDeleted);
 		turn++;
 	}
@@ -54,6 +74,14 @@ public class Game {
 		}
 	}
 	
+	public boolean isPlayer1Turn(){
+		return turn % 2 == 0;
+	}
+	
+	public boolean isPlayer2Turn(){
+		return !isPlayer1Turn();
+	}
+	
 	public int getWidthSize(){
 		return board.getWidthSize();
 	}
@@ -66,7 +94,7 @@ public class Game {
 		return board.isOver();
 	}
 	
-	public boolean playerWon() {
+	public boolean player1Won() {
 		return player1Score > player2Score;
 	}
 
@@ -76,5 +104,51 @@ public class Game {
 
 	public int getPlayer2Score() {
 		return player2Score;
+	}
+	
+	public int getLastCol() {
+		return board.getLastCol();
+	}
+	
+	public int getLastRow() {
+		return board.getLastRow();
+	}
+	
+	public Game clone(){
+		return new Game(board.clone(), player1Score, player2Score, turn);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((board == null) ? 0 : board.hashCode());
+		result = prime * result + player1Score;
+		result = prime * result + player2Score;
+		result = prime * result + turn;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Game other = (Game) obj;
+		if (board == null) {
+			if (other.board != null)
+				return false;
+		} else if (!board.equals(other.board))
+			return false;
+		if (player1Score != other.player1Score)
+			return false;
+		if (player2Score != other.player2Score)
+			return false;
+		if (turn != other.turn)
+			return false;
+		return true;
 	}
 }

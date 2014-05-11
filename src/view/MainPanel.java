@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
 import model.Game;
+import model.minimax.Minimax;
 import view.panel.GamePanel;
 import view.panel.InfoPanel;
 
@@ -18,14 +19,16 @@ public class MainPanel extends JPanel{
 	private static final int INFO_WIDTH = 300;
 	
 	private Game game;
+	private Minimax minimax;
 	private GamePanel gPanel;
 	private InfoPanel infoPanel;
 	private ImageManager imgManager;
 	
 	private int height;
 	
-	public MainPanel(Game game){
+	public MainPanel(Game game, Minimax minimax){
 		this.game = game;
+		this.minimax = minimax;
 		this.imgManager = new ImageManager();
 		this.height = CELL_SIZE * game.getHeightSize();
 		setLayout(null);
@@ -39,10 +42,15 @@ public class MainPanel extends JPanel{
 	    	@Override
 			public void mouseClicked(MouseEvent e) {
 				Point tilePos = MainPanel.this.getTilePosition(e.getX(), e.getY());
-				if( tilePos != null ){
+				if( tilePos != null && MainPanel.this.game.isPlayer1Turn() ){
 					MainPanel.this.game.play(tilePos);
 					MainPanel.this.refresh();
 				}
+				else if( tilePos != null && MainPanel.this.game.isPlayer2Turn() ){
+					Point pos =  MainPanel.this.minimax.minimax(MainPanel.this.game);
+					MainPanel.this.game.play(pos);
+					MainPanel.this.refresh();
+				}		
 			}
 		});
 	}	
