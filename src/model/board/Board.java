@@ -72,28 +72,22 @@ public class Board {
 	}
 	
 	public int play(Point pos){
-		Board b = this.clone();
-		//long iDTime = System.nanoTime();
+		Board b = this.clone(); //TODO: Remove.
+		
 		int tilesDeleted = delete(pos);
 		if( tilesDeleted == 0 )
 			return 0;
-		//long fDTime = System.nanoTime();
-		long iGTime = System.nanoTime();
-		fall();		
+		
+		long iGTime = System.nanoTime(); //TODO: Remove timer. Keep control of it.
+		gravity();		
 		long fGTime = System.nanoTime();
-		//long iATime = System.nanoTime();
-		alignLeft();
-		//long fATime = System.nanoTime();
-		//long dTime = fDTime - iDTime; 
 		long gTime = fGTime - iGTime; 
-		//long aTime = fATime - iATime; 
-		if( gTime > 10000 )
-			System.out.println( //"Position: " + pos +
-								//" delete: " + dTime + 
-								" gravity " + gTime); 
-								//" align: " + aTime);
+		System.out.println("GravityTime: " + gTime); 
+		
 		if( gTime > 1000000 )
 			System.out.println("Initial Board: \n" + b + "\n Final Board: \n" + this);
+		
+		alignLeft();
 		return tilesDeleted;
 	}
 	
@@ -130,20 +124,20 @@ public class Board {
 		return tilesDeleted + 1;
 	}
 	
-	private void fall() {
+	private void gravity() {
 		long iGTime = System.nanoTime();
 		int auxRow = lastRow;
 		lastRow = board.length;
 		for( int x = 0; x <= lastCol; x++ ){
 			int spaces = 0;
 			for( int y = board.length - 1; y >= auxRow; y-- ){
-				Point pos = new Point(x,y);
-				Tile tile = getTile(pos);
+				Point p = new Point(x,y);
+				Tile tile = getTile(p);
 
 				if( tile.isEmpty() )
 					spaces++;
 				else if( spaces > 0 ){
-					drop(pos, spaces);
+					drop(p, spaces);
 				}
 			}
 			lastRow = Math.min(lastRow, spaces + auxRow);
