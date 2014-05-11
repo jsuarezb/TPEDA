@@ -49,7 +49,7 @@ public class Board {
 		List<Group> groups = new ArrayList<Group>();
 		Set<Point> pointSet = new HashSet<Point>();
 		for( int y = lastRow; y < board.length; y++ )
-			for( int x = 0; x < lastCol; x++ ){
+			for( int x = 0; x <= lastCol; x++ ){
 				Point pos = new Point(x,y);
 				if( !pointSet.contains(pos) ){
 					Tile tile = getTile(pos);

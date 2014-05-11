@@ -15,11 +15,13 @@ public class Game {
 	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET, Color.ORANGE,
 							  Color.GRAY, Color.PINK, Color.BROWN};
 	private static int COLORS = 3;
-	private static int ROWS = 5;
-	private static int COLS = 5;
+	private static int ROWS = 3;
+	private static int COLS = 4;
 	
 	public Game() {
-		Tile[][] tiles = randomGame();
+		Tile[][] tiles = {{new Tile(Color.EMPTY), new Tile(Color.EMPTY), new Tile(Color.EMPTY), new Tile(Color.RED)},
+				          {new Tile(Color.EMPTY), new Tile(Color.BLUE), new Tile(Color.GREEN), new Tile(Color.RED)},
+				          {new Tile(Color.BLUE), new Tile(Color.GREEN), new Tile(Color.BLUE), new Tile(Color.RED)}};
 		board = new Board(tiles);
 	}
 	

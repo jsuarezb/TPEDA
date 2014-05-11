@@ -10,6 +10,10 @@ import model.Game;
 public class Minimax {
 	
 	public Point minimax(Game game){	
+		System.out.println("minimax");
+		List<Group> groups = game.getGroups();
+		for(Group group: groups)
+			System.out.println(group);
 		Node<Game> root = new Node<Game>(game);
 		double value = minimax(root, 8);
 		for( Node<Game> son: root.sons )
