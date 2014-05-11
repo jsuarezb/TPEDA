@@ -12,9 +12,9 @@ public class Game {
 	private int turn;
 	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET, Color.ORANGE,
 							  Color.GRAY, Color.PINK, Color.BROWN};
-	private static int COLORS = 4;
-	private static int ROWS = 8;
-	private static int COLS = 8;
+	private static int COLORS = 9;
+	private static int ROWS = 15;
+	private static int COLS = 15;
 	
 	public Game() {
 		Tile[][] tiles = randomGame();
