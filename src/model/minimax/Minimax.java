@@ -12,21 +12,20 @@ public class Minimax {
 	
 	public Point minimax(Game game){	
 		Node<Game> root = new Node<Game>(game);
-		double value = minimax(root, 3);
-		System.out.println("Termine :)");
+		double value = minimax(root, 4);
 		for( Node<Game> son: root.sons )
-			if( son.value == value ){
-				System.out.println(son.play);
+			if( son.value == value )
 				return son.play;
-			}
 		return null;
 	}
 	
 	public double minimax(Node<Game> node, int height){
 		Game game = node.getElem();
 		double value;
-		if( height == 0 || game.isOver() )
-			return heuristic(game);
+		if( height == 0 || game.isOver() ){
+			node.setValue(heuristic(game));
+			return node.value;
+		}
 		
 		if( game.isPlayer1Turn() )
 			value = Double.POSITIVE_INFINITY;
@@ -43,14 +42,10 @@ public class Minimax {
 					games.add(gameCopy);
 					Node<Game> newNode = new Node<Game>(gameCopy, play);
 					node.addSon(newNode);
-					if( game.isPlayer1Turn() ){
+					if( game.isPlayer1Turn() )
 						value = Math.min(value, minimax(newNode, height - 1));
-						System.out.println("value: " + value + "mov: " + play + "turn: p1" + "height: " + height);
-					}
-					else{
+					else
 						value = Math.max(value, minimax(newNode, height - 1));
-						System.out.println("value: " + value + "mov: " + play + "turn: p2" + "height: " + height);
-					}
 				}
 			}
 		node.setValue(value);

@@ -4,7 +4,6 @@ import java.awt.Point;
 import model.board.Board;
 import model.board.Tile;
 import model.board.Tile.Color;
-import model.minimax.Minimax;
 
 public class Game {
 	private Board board;
@@ -13,9 +12,9 @@ public class Game {
 	private int turn;
 	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET, Color.ORANGE,
 							  Color.GRAY, Color.PINK, Color.BROWN};
-	private static int COLORS = 3;
-	private static int ROWS = 7;
-	private static int COLS = 7;
+	private static int COLORS = 4;
+	private static int ROWS = 8;
+	private static int COLS = 8;
 	
 	public Game() {
 		Tile[][] tiles = randomGame();

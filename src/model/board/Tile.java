@@ -10,6 +10,10 @@ public class Tile {
 		private Color(char c){
 			this.c = c; 
 		}
+		
+		public char getChar(){
+			return c;
+		}
 	}
 	
 	private Color color;

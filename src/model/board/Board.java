@@ -23,14 +23,15 @@ public class Board {
 	public boolean isOver() {
 		for( int y = board.length - 1; y >= lastRow; y-- )
 			for( int x = 0; x <= lastCol; x++ )
-				if( hasAdyacents(new Point(x,y)) )
+				if( hasAdjacents(new Point(x,y)) )
 					return false;
 		return true;
 	}
 
-	private boolean hasAdyacents(Point pos) {
+	private boolean hasAdjacents(Point pos) {
 		Tile tile = getTile(pos);
-
+		if( tile.isEmpty() )
+			return false;
 		if( tile.equals(getRight(pos)) )
 			return true;
 		if( tile.equals(getTop(pos)) )
@@ -47,10 +48,8 @@ public class Board {
 	}
 	
 	private Tile getTile(int x, int y) {
-		if (y < 0 || y >= board.length
-				|| x < 0 || x >= board[0].length)
+		if (y < 0 || y >= board.length || x < 0 || x >= board[0].length)
 			return null;
-
 		return board[y][x];
 	}
 	
@@ -73,9 +72,28 @@ public class Board {
 	}
 	
 	public int play(Point pos){
+		Board b = this.clone();
+		//long iDTime = System.nanoTime();
 		int tilesDeleted = delete(pos);
-		gravity();
+		if( tilesDeleted == 0 )
+			return 0;
+		//long fDTime = System.nanoTime();
+		long iGTime = System.nanoTime();
+		fall();		
+		long fGTime = System.nanoTime();
+		//long iATime = System.nanoTime();
 		alignLeft();
+		//long fATime = System.nanoTime();
+		//long dTime = fDTime - iDTime; 
+		long gTime = fGTime - iGTime; 
+		//long aTime = fATime - iATime; 
+		if( gTime > 10000 )
+			System.out.println( //"Position: " + pos +
+								//" delete: " + dTime + 
+								" gravity " + gTime); 
+								//" align: " + aTime);
+		if( gTime > 1000000 )
+			System.out.println("Initial Board: \n" + b + "\n Final Board: \n" + this);
 		return tilesDeleted;
 	}
 	
@@ -112,25 +130,29 @@ public class Board {
 		return tilesDeleted + 1;
 	}
 	
-	private void gravity() {
+	private void fall() {
+		long iGTime = System.nanoTime();
 		int auxRow = lastRow;
 		lastRow = board.length;
 		for( int x = 0; x <= lastCol; x++ ){
 			int spaces = 0;
-			
 			for( int y = board.length - 1; y >= auxRow; y-- ){
 				Point pos = new Point(x,y);
 				Tile tile = getTile(pos);
 
 				if( tile.isEmpty() )
 					spaces++;
-				else if( spaces > 0 )
+				else if( spaces > 0 ){
 					drop(pos, spaces);
+				}
 			}
 			lastRow = Math.min(lastRow, spaces + auxRow);
 		}
+		long fGTime = System.nanoTime();
+		long gTime = fGTime - iGTime; 
+		System.out.println("InsideGravityTime " + gTime);
 	}
-
+	
 	private void drop(Point pos, int spaces) {
 		board[pos.y + spaces][pos.x] = getTile(pos);
 		board[pos.y][pos.x] = new Tile(Color.EMPTY);
@@ -201,5 +223,15 @@ public class Board {
 		int result = 1;
 		result = prime * result + Arrays.hashCode(board);
 		return result;
+	}
+	
+	public String toString() {
+		String ans = "";
+		for( int y = 0; y < board.length; y++ ){
+			for( int x = 0; x < board[0].length; x++ )
+				ans += board[y][x].getColor().getChar() + " ";
+			ans += "\n";
+		}
+		return ans;
 	}
 }

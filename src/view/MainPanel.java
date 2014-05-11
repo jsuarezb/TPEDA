@@ -37,21 +37,22 @@ public class MainPanel extends JPanel{
 		setSize(CELL_SIZE * game.getWidthSize() + INFO_WIDTH, height);
 		refresh();
 		
-		addMouseListener(new MouseAdapter() {
-	    	
+		addMouseListener(new MouseAdapter() {    	
 	    	@Override
 			public void mouseClicked(MouseEvent e) {
-				Point tilePos = MainPanel.this.getTilePosition(e.getX(), e.getY());
-				if( tilePos != null && MainPanel.this.game.isPlayer1Turn() ){
-					MainPanel.this.game.play(tilePos);
-					MainPanel.this.refresh();
+	    		MainPanel mPanel = MainPanel.this;
+				if(!mPanel.game.isOver()){
+					Point tilePos = mPanel.getTilePosition(e.getX(), e.getY());
+					if( tilePos != null && MainPanel.this.game.isPlayer1Turn() ){
+						mPanel.game.play(tilePos);
+					}
+					else if( tilePos != null && MainPanel.this.game.isPlayer2Turn() ){
+						Point pos =  MainPanel.this.minimax.minimax(MainPanel.this.game);
+						MainPanel.this.game.play(pos);			
+					}		
 				}
-				else if( tilePos != null && MainPanel.this.game.isPlayer2Turn() ){
-					Point pos =  MainPanel.this.minimax.minimax(MainPanel.this.game);
-					MainPanel.this.game.play(pos);
-					MainPanel.this.refresh();
-				}		
-			}
+				mPanel.refresh();
+	    	}
 		});
 	}	
 	
