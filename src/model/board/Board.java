@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Set;
 
 import model.board.Tile.Color;
-import model.minimax.Group;
 
 public class Board {
 	private Tile[][] board;
 	private int lastCol;
 	private int lastRow;
 	public static final int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
-
+	
 	public Board( Tile[][] board ) {
 		this(board, 0, board[0].length - 1);
 	}
@@ -48,18 +47,15 @@ public class Board {
 	public List<Group> getGroups() {
 		List<Group> groups = new ArrayList<Group>();
 		Set<Point> pointSet = new HashSet<Point>();
-		for( int y = lastRow; y < board.length; y++ )
+		for( int y = board.length- 1; y >= lastRow; y-- )
 			for( int x = 0; x <= lastCol; x++ ){
 				Point pos = new Point(x,y);
-				if( !pointSet.contains(pos) ){
-					Tile tile = getTile(pos);
-					if( !tile.isEmpty() && hasAnyAdjacents(pos) ){
-						Group group = new Group(tile, pos);
-						Set<Point> newPoints = group.completeGroup(this);
-						pointSet.addAll(newPoints);
+				if( !pointSet.contains(pos) )
+					if( hasAdjacents(pos) ){
+						Group group = new Group(pos);;
+						pointSet.addAll(group.points);
 						groups.add(group);
 					}
-				}
 			}
 		return groups;
 	}
@@ -136,65 +132,50 @@ public class Board {
 		return board[pos.y + 1][pos.x];
 	}
 	
-	public int play(Point pos){		
-		int tilesDeleted = delete(pos);
-		if( tilesDeleted == 0 )
-			return 0;		
-		gravity();				
+	public Group getGroup(Point p){
+		return new Group(p);
+	}
+	
+	public int play(Group group){
+		int tilesDeleted = delete(group);
+		gravity(group.cols);
 		alignLeft();
+		System.out.println("Last row: " + lastRow + " Last col: " + lastCol);
 		return tilesDeleted;
 	}
 	
-	public int delete(Point pos) {
-		boolean hasAdj = false;
-		Tile tile = getTile(pos);
-
-		for (int i = 0; i < moves.length && !hasAdj; i++) {
-			Point point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
-			if (tile.equals(getTile(point)))
-				hasAdj = true;
-		}
-
-		if (!hasAdj)
-			return 0;
-
-		return deleteTile(pos);
-	}
-
-	private int deleteTile(Point pos) {
-		int tilesDeleted = 0;
-		Point point;
-		Tile tile = getTile(pos), adjTile;
-		board[pos.y][pos.x] = new Tile(Color.EMPTY);
-		
-		for (int i = 0; i < moves.length; i++) {
-			point = new Point(pos.x + moves[i][0], pos.y + moves[i][1]);
-			adjTile = getTile(point);
-
-			if (tile.equals(adjTile))
-				tilesDeleted += deleteTile(point);
-		}
-		
-		return tilesDeleted + 1;
+	private int delete(Group group){
+		for(Point p: group.points)
+			board[p.y][p.x] = EmptyTile.getInstance();
+		return group.points.size();
 	}
 	
-	private void gravity() {
-		int auxRow = lastRow;
-		lastRow = board.length;
-		for( int x = 0; x <= lastCol; x++ ){
-			int spaces = 0;
-			for( int y = board.length - 1; y >= auxRow; y-- ){
-				Point p = new Point(x,y);
-				Tile tile = getTile(p);
+	private void gravity(Set<Integer> cols){
+		for(Integer col: cols)
+			gravity(col);
+		updateLastRow();
+	}
+	
+	private void gravity(int x){
+		int spaces = 0;
+		for( int y = board.length - 1; y >= lastRow; y-- ){
+			Point p = new Point(x,y);
+			Tile tile = getTile(p);
 
-				if( tile.isEmpty() )
-					spaces++;
-				else if( spaces > 0 ){
-					drop(p, spaces);
-				}
-			}
-			lastRow = Math.min(lastRow, spaces + auxRow);
+			if( tile.isEmpty() )
+				spaces++;
+			else if( spaces > 0 )
+				drop(p, spaces);
 		}
+	}
+	
+	private void updateLastRow(){
+		for( int y = lastRow; y < getHeightSize(); y++ )
+			for( int x = 0; x <= lastCol; x++ )
+				if( !getTile(x,y).isEmpty() ){
+					lastRow = y;
+					return;
+				}
 	}
 	
 	private void drop(Point pos, int spaces) {
@@ -277,6 +258,45 @@ public class Board {
 			ans += "\n";
 		}
 		return ans;
+	}
+	
+	public class Group {
+
+		private Set<Point> points = new HashSet<Point>();
+		private Set<Integer> cols = new HashSet<Integer>();
+		private Point firstPoint;
+		private Color color;
+		
+		public Group(Point p){
+			this.firstPoint = p;
+			color = getTile(p).getColor();
+			addPoint(p);
+			findAdj(p);
+		}
+		
+		public void addPoint(Point p){
+			points.add(p);
+			cols.add(p.x);
+		}
+
+		public Point getPoint(){
+			return firstPoint;
+		}
+		
+		public String toString(){
+			return "Group: " + getPoint() + " Color: " + color;
+		}
+		
+		public void findAdj(Point p){
+			for( int[] move: moves ){
+				Point movPoint = new Point(p.x + move[0], p.y + move[1]);
+				Tile tile = getTile(movPoint);
+				if( tile != null && tile.getColor().equals(color) && !points.contains(movPoint) ){
+					addPoint(movPoint);
+					findAdj(movPoint);
+				}
+			}
+		}
 	}
 
 }
