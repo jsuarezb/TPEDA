@@ -14,15 +14,10 @@ public class Game {
 	private int turn = (int)Math.round(Math.random());
 	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET, Color.ORANGE,
 							  Color.GRAY, Color.PINK, Color.BROWN};
-<<<<<<< HEAD
+
 	private static int COLORS = 4;
 	private static int ROWS = 8;
 	private static int COLS = 8;
-=======
-	private static int COLORS = 3;
-	private static int ROWS = 10;
-	private static int COLS = 10;
->>>>>>> a981628c5e9bc19fab9ace12248bc2b030f6c00e
 	
 	public Game() {
 		Tile[][] tiles = randomGame();
