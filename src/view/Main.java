@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
@@ -11,7 +12,7 @@ import model.minimax.Minimax;
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private MainPanel mainPanel;
+	private static MainPanel mainPanel;
 	
 	public Main(Game game, Minimax minimax) {
 		super("Azulejos");
@@ -28,6 +29,17 @@ public class Main extends JFrame {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		Main mainWindow = new Main(new Game(), new Minimax());
 		mainWindow.setVisible(true);
+		while(!mainPanel.game.isOver()){
+			Point pos = mainPanel.minimax.minimax(mainPanel.game);
+			mainPanel.game.play(pos);	
+			mainPanel.refresh();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
 	}
 
 }

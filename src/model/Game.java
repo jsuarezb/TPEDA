@@ -11,17 +11,15 @@ public class Game {
 	private Board board;
 	private int player1Score;
 	private int player2Score;
-	private int turn = 1;
+	private int turn = (int)Math.round(Math.random());
 	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET, Color.ORANGE,
 							  Color.GRAY, Color.PINK, Color.BROWN};
-	private static int COLORS = 3;
-	private static int ROWS = 3;
-	private static int COLS = 4;
+	private static int COLORS = 4;
+	private static int ROWS = 8;
+	private static int COLS = 8;
 	
 	public Game() {
-		Tile[][] tiles = {{new Tile(Color.EMPTY), new Tile(Color.EMPTY), new Tile(Color.EMPTY), new Tile(Color.RED)},
-				          {new Tile(Color.EMPTY), new Tile(Color.BLUE), new Tile(Color.GREEN), new Tile(Color.RED)},
-				          {new Tile(Color.BLUE), new Tile(Color.GREEN), new Tile(Color.BLUE), new Tile(Color.RED)}};
+		Tile[][] tiles = randomGame();
 		board = new Board(tiles);
 	}
 	

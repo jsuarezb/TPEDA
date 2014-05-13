@@ -10,12 +10,12 @@ import model.Game;
 public class Minimax {
 	
 	public Point minimax(Game game){	
-		System.out.println("minimax");
-		List<Group> groups = game.getGroups();
-		for(Group group: groups)
-			System.out.println(group);
+//		System.out.println("minimax");
+//		List<Group> groups = game.getGroups();
+//		for(Group group: groups)
+//			System.out.println(group);
 		Node<Game> root = new Node<Game>(game);
-		double value = minimax(root, 8);
+		double value = minimax(root, 6);
 		for( Node<Game> son: root.sons )
 			if( son.value == value )
 				return son.play;
@@ -44,17 +44,17 @@ public class Minimax {
 		List<Group> groups = game.getGroups();
 		long gfT = System.nanoTime();
 		long gT = gfT - giT;
-		long piT = System.nanoTime();
 		for(Group group: groups){
 			Game gameCopy = game.clone();
 			Point play = group.getPoint();
+			long piT = System.nanoTime();
 			gameCopy.play(play);
+			long pfT = System.nanoTime();
+			long pT = pfT - piT;
 			if( !games.contains(gameCopy) && !gameCopy.equals(game)){
 				games.add(gameCopy);
 				Node<Game> newNode = new Node<Game>(gameCopy, play);
 				node.addSon(newNode);
-				long pfT = System.nanoTime();
-				long pT = pfT - piT;
 				long minFTime = System.nanoTime();
 				long minTime = minFTime - miniTime;
 				System.out.println("MinTime: " + minTime + " XTime: " + pT + " groupTime: " + gT);

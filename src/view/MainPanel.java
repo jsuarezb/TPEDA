@@ -18,8 +18,8 @@ public class MainPanel extends JPanel{
 	private static final int CELL_SIZE = 40;
 	private static final int INFO_WIDTH = 300;
 	
-	private Game game;
-	private Minimax minimax;
+	Game game;
+	Minimax minimax;
 	private GamePanel gPanel;
 	private InfoPanel infoPanel;
 	private ImageManager imgManager;
@@ -42,9 +42,22 @@ public class MainPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 	    		MainPanel mPanel = MainPanel.this;
 				if(!mPanel.game.isOver()){
+					Point pos = mPanel.minimax.minimax(MainPanel.this.game);
+					MainPanel.this.game.play(pos);	
+					mPanel.refresh();
+				}		
+	    	}
+		});
+		
+		/*addMouseListener(new MouseAdapter() {    	
+	    	@Override
+			public void mouseClicked(MouseEvent e) {
+	    		MainPanel mPanel = MainPanel.this;
+				if(!mPanel.game.isOver()){
 					Point tilePos = mPanel.getTilePosition(e.getX(), e.getY());
-					if( tilePos != null && MainPanel.this.game.isPlayer1Turn() )
+					if( tilePos != null && MainPanel.this.game.isPlayer1Turn() ){
 						mPanel.game.play(tilePos);
+					}
 					else if( tilePos != null && MainPanel.this.game.isPlayer2Turn() ){
 						Point pos =  MainPanel.this.minimax.minimax(MainPanel.this.game);
 						MainPanel.this.game.play(pos);			
@@ -52,7 +65,7 @@ public class MainPanel extends JPanel{
 				}
 				mPanel.refresh();
 	    	}
-		});
+		});*/
 	}	
 	
 	public Point getTilePosition(int x, int y) {
