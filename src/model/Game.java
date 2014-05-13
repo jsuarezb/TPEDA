@@ -61,11 +61,15 @@ public class Game {
 	}
 	
 	public void play(Group group) {
+		long piT = System.nanoTime();
 		int tilesDeleted = board.play(group);
 		if( tilesDeleted == 0 )
 			return;
 		score(tilesDeleted);
 		turn++;
+		long pfT = System.nanoTime();
+		long pT = pfT - piT;
+		System.out.println("PLyatime: " + pT);
 	}
 	
 	private void score(int tiles){

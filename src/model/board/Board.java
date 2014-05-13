@@ -137,9 +137,13 @@ public class Board {
 	}
 	
 	public int play(Group group){
+		long piT = System.nanoTime();
 		int tilesDeleted = delete(group);
 		gravity(group.cols);
 		alignLeft();
+		long pfT = System.nanoTime();
+		long pT = pfT - piT;
+		System.out.println("deltetime: " + pT);
 		System.out.println("Last row: " + lastRow + " Last col: " + lastCol);
 		return tilesDeleted;
 	}

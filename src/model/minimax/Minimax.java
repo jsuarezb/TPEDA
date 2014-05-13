@@ -48,14 +48,13 @@ public class Minimax {
 		long gT = gfT - giT;
 		for(Group group: groups){
 			Game gameCopy = game.clone();
-			Point play = group.getPoint();
 			long piT = System.nanoTime();
-			gameCopy.play(play);
+			gameCopy.play(group);
 			long pfT = System.nanoTime();
 			long pT = pfT - piT;
 			if( !games.contains(gameCopy) && !gameCopy.equals(game)){
 				games.add(gameCopy);
-				Node<Game> newNode = new Node<Game>(gameCopy, play);
+				Node<Game> newNode = new Node<Game>(gameCopy, group.getPoint());
 				node.addSon(newNode);
 				long minFTime = System.nanoTime();
 				long minTime = minFTime - miniTime;
