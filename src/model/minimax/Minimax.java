@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import model.Game;
+import model.board.Board.Group;
 
 public class Minimax {
 	
@@ -15,7 +17,11 @@ public class Minimax {
 //		for(Group group: groups)
 //			System.out.println(group);
 		Node<Game> root = new Node<Game>(game);
+<<<<<<< HEAD
 		double value = minimax(root, 6);
+=======
+		double value = minimax(root, 2);
+>>>>>>> a981628c5e9bc19fab9ace12248bc2b030f6c00e
 		for( Node<Game> son: root.sons )
 			if( son.value == value )
 				return son.play;
@@ -57,7 +63,7 @@ public class Minimax {
 				node.addSon(newNode);
 				long minFTime = System.nanoTime();
 				long minTime = minFTime - miniTime;
-				System.out.println("MinTime: " + minTime + " XTime: " + pT + " groupTime: " + gT);
+				System.out.println("MinTime: " + minTime + " PlayTime: " + pT + " groupTime: " + gT);
 				if( game.isPlayer1Turn() )
 					value = Math.min(value, minimax(newNode, height - 1));
 				else

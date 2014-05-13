@@ -3,9 +3,9 @@ import java.awt.Point;
 import java.util.List;
 
 import model.board.Board;
+import model.board.Board.Group;
 import model.board.Tile;
 import model.board.Tile.Color;
-import model.minimax.Group;
 
 public class Game {
 	private Board board;
@@ -14,9 +14,15 @@ public class Game {
 	private int turn = (int)Math.round(Math.random());
 	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET, Color.ORANGE,
 							  Color.GRAY, Color.PINK, Color.BROWN};
+<<<<<<< HEAD
 	private static int COLORS = 4;
 	private static int ROWS = 8;
 	private static int COLS = 8;
+=======
+	private static int COLORS = 3;
+	private static int ROWS = 10;
+	private static int COLS = 10;
+>>>>>>> a981628c5e9bc19fab9ace12248bc2b030f6c00e
 	
 	public Game() {
 		Tile[][] tiles = randomGame();
@@ -52,10 +58,15 @@ public class Game {
 		return board.getTile(p);
 	}
 	
-	public void play(Point tilePos) {
-		if( getTile(tilePos).isEmpty() )
+	public void play(Point pos) {
+		if( !board.hasAnyAdjacents(pos) )
 			return;
-		int tilesDeleted = board.play(tilePos);
+		Group group = board.getGroup(pos);
+		play(group);
+	}
+	
+	public void play(Group group) {
+		int tilesDeleted = board.play(group);
 		if( tilesDeleted == 0 )
 			return;
 		score(tilesDeleted);
