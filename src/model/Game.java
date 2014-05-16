@@ -10,9 +10,9 @@ public class Game { // TODO: Todo's.
 	// TODO: REMOVE STATIC VARS (ALL?)
 	private static final Tile[] colors = {Tile.RED, Tile.BLUE, Tile.GREEN, Tile.YELLOW, Tile.VIOLET,
 		 Tile.PINK, Tile.CYAN, Tile.LIME, Tile.ORANGE}; 
-	private static int COLORS = 3;
-	private static int ROWS = 8;
-	private static int COLS = 8;
+	private static int COLORS = 2;
+	private static int ROWS = 5;
+	private static int COLS = 5;
 	
 	private static final double BONUS = 1.3;
 	private Board board;

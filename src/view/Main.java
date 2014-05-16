@@ -15,6 +15,8 @@ public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private MainPanel mainPanel;
+	private static final int mPanelRelX = 8;
+	private static final int mPanelRelY = 30;
 	private Game game;
 	private Minimax minimax;
 	
@@ -36,24 +38,33 @@ public class Main extends JFrame {
 
 			public void mouseClicked(MouseEvent e) {
 	    		Main main = Main.this;
-	    		
-				if(!main.game.isOver()) {
-					Point mov = main.minimax.minimax(Main.this.game);
+
+				if(!main.game.isOver() && main.game.isP1Turn() ) {
+					Point p = main.mainPanel.getTilePosition(e.getX() - mPanelRelX, e.getY() - mPanelRelY);
+					if( p != null ) {
+						main.game.play(p.x, p.y);	
+						main.mainPanel.refresh();
+					}
+						
+					/*Point mov = main.minimax.minimax(Main.this.game);
 					main.game.play(mov.x, mov.y);	
-					main.mainPanel.refresh();
-					
+					main.mainPanel.refresh();	
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
-					}
+					}*/
 					
-					if(!main.game.isOver()) {
+					/*if(!main.game.isOver()) {
 						mov = main.minimax.minimax(Main.this.game);
 						main.game.play(mov.x, mov.y);	
 						main.mainPanel.refresh();
-					}
-				}		
+					}*/
+				} else if(!main.game.isOver() ) {	
+					Point mov = main.minimax.minimax(Main.this.game);
+					main.game.play(mov.x, mov.y);	
+					main.mainPanel.refresh();		
+				}
 	    	}
 		});
 	}
