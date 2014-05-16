@@ -14,12 +14,16 @@ public class InfoPanel extends JPanel {
 
 	private Game game;
 	private ScorePanel scorePanel;
+	private int width;
+	private int height;
 	
-	public InfoPanel(Game game, ImageManager imgManager, int xPos, int width, int height) {
+	public InfoPanel(Game game, ImageManager imgManager, int xPosition, int width, int height) {
 		this.game = game;
+		this.width = width;
+		this.height = height;
 		
 		setBackground(Color.GRAY);
-		setBounds(xPos, 0, width, height);
+		setBounds(xPosition, 0, width, height);
 		scorePanel = new ScorePanel(game);
 		scorePanel.setVisible(true);
 		add(scorePanel);
@@ -27,7 +31,7 @@ public class InfoPanel extends JPanel {
 	}
 	
 	public void refresh(){
-		repaint();
+		paintImmediately(0, 0, width, height);
 	}
 	
 	@Override
@@ -38,10 +42,10 @@ public class InfoPanel extends JPanel {
 			Font plain = new Font("Arial", Font.BOLD, 12);
 			g.setFont(plain);
 			
-			if (game.player1Won())
-				g.drawString("Game Over - Player1 WON !!!", 10, 140);
+			if ( game.P1Won() )
+				g.drawString("Game Over - Player1 WON !!!", 60, 140);
 			else
-				g.drawString("Game Over - Player1 LOSE !!!", 10, 140);
+				g.drawString("Game Over - Player1 LOSE !!!", 60, 140);
 		}
 	}	
 }

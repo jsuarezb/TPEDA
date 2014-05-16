@@ -1,124 +1,120 @@
 package model;
-import java.awt.Point;
-import java.util.List;
 
+import java.util.List;
 import model.board.Board;
 import model.board.Board.Group;
-import model.board.Tile;
-import model.board.Tile.Color;
+import model.board.Board.Tile;
 
-public class Game {
-	private Board board;
-	private int player1Score;
-	private int player2Score;
-	private int turn = (int)Math.round(Math.random());
-	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET, Color.ORANGE,
-							  Color.GRAY, Color.PINK, Color.BROWN};
-
-	private static int COLORS = 4;
+public class Game { // TODO: Todo's.
+	
+	// TODO: REMOVE STATIC VARS (ALL?)
+	private static final Tile[] colors = {Tile.RED, Tile.BLUE, Tile.GREEN, Tile.YELLOW, Tile.VIOLET,
+		 Tile.PINK, Tile.CYAN, Tile.LIME, Tile.ORANGE}; 
+	private static int COLORS = 3;
 	private static int ROWS = 8;
 	private static int COLS = 8;
 	
+	private static final double BONUS = 1.3;
+	private Board board;
+	private int P1Score;
+	private int P2Score;
+	private boolean P1Turn = true;
+	
 	public Game() {
-		Tile[][] tiles = randomGame();
+		Tile[][] tiles = randomGame(); // TODO: CHANGE FOR FILE READER.
 		board = new Board(tiles);
 	}
 	
-	private Tile[][] randomGame(){
+	private Game(Board board, int P1Score, int P2Score, boolean turn) {
+		this.board = board;
+		this.P1Score = P1Score;
+		this.P2Score = P2Score;
+		this.P1Turn = turn;
+	}
+	
+	private Tile[][] randomGame() {  //TODO: REMOVE METHOD.
 		Tile[][] tiles = new Tile[ROWS][COLS];
+		
 		for( int i = 0; i < ROWS; i++)
-			for(int j = 0; j < COLS; j++){
-				int val = (int)(Math.random()*COLORS); 
-				tiles[i][j] = new Tile(colors[val]);
-			}
+			for(int j = 0; j < COLS; j++)
+				tiles[i][j] = colors[(int)(Math.random()*COLORS)];
+		
 		return tiles;
 	}
-
-	public Game(Board board, int player1Score, int player2Score, int turn){
-		this.board = board;
-		this.player1Score = player1Score;
-		this.player2Score = player2Score;
-		this.turn = turn;
-	}
 	
-	public Board getBoard() {
-		return board;
-	}
-	
-	public List<Group> getGroups(){
-		return board.getGroups();
-	}
-	
-	public Tile getTile(Point p){
-		return board.getTile(p);
-	}
-	
-	public void play(Point pos) {
-		if( !board.hasAnyAdjacents(pos) )
+	public void play(int x, int y) {
+		if( !board.hasAdjacents(x, y) )
 			return;
-		Group group = board.getGroup(pos);
-		play(group);
+		
+		play(board.getGroup(x, y));
 	}
 	
 	public void play(Group group) {
-		long piT = System.nanoTime();
-		int tilesDeleted = board.play(group);
-		if( tilesDeleted == 0 )
-			return;
-		score(tilesDeleted);
-		turn++;
-		long pfT = System.nanoTime();
-		long pT = pfT - piT;
-		System.out.println("PLyatime: " + pT);
+		score(board.play(group));
+		changeTurn();
 	}
 	
 	private void score(int tiles){
 		int score;
+		
 		if( tiles <= 5 )
 			score = (int)Math.round(Math.pow(2, tiles - 2));
 		else
 			score = tiles*2;
-		if( turn % 2 == 0 ){
-			player1Score += score;
+		
+		if( isP1Turn() ){
+			P1Score += score;
 			if( board.isEmpty() )
-				player1Score *= 1.3;
+				P1Score *= BONUS;
 		}else{
-			player2Score += score;
+			P2Score += score;
 			if( board.isEmpty() )
-				player2Score *= 1.3;
+				P2Score *= BONUS;
 		}
 	}
 	
-	public boolean isPlayer1Turn(){
-		return turn % 2 == 0;
-	}
-	
-	public boolean isPlayer2Turn(){
-		return !isPlayer1Turn();
-	}
-	
-	public int getWidthSize(){
-		return board.getWidthSize();
-	}
-	
-	public int getHeightSize(){
-		return board.getHeightSize();
+	private void changeTurn(){
+		this.P1Turn = !P1Turn;
 	}
 	
 	public boolean isOver() {
 		return board.isOver();
 	}
 	
-	public boolean player1Won() {
-		return player1Score > player2Score;
+	public boolean P1Won() {
+		return P1Score > P2Score;
+	}
+	
+	public boolean isP1Turn(){
+		return P1Turn;
+	}
+	
+	public boolean isP2Turn(){
+		return !P1Turn;
+	}
+	
+	public Game clone(){
+		return new Game(board.clone(), P1Score, P2Score, P1Turn);
+	}
+	
+	public Board getBoard() {
+		return board;
+	}
+	
+	public int getP1Score() {
+		return P1Score;
 	}
 
-	public int getPlayer1Score() {
-		return player1Score;
+	public int getP2Score() {
+		return P2Score;
 	}
-
-	public int getPlayer2Score() {
-		return player2Score;
+	
+	public Tile getTile(int x, int y) {
+		return board.getTile(x, y);
+	}
+	
+	public List<Group> getGroups() {
+		return board.getGroups();
 	}
 	
 	public int getLastCol() {
@@ -129,41 +125,11 @@ public class Game {
 		return board.getLastRow();
 	}
 	
-	public Game clone(){
-		return new Game(board.clone(), player1Score, player2Score, turn);
+	public int height() {
+		return board.height();
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((board == null) ? 0 : board.hashCode());
-		result = prime * result + player1Score;
-		result = prime * result + player2Score;
-		result = prime * result + turn;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Game other = (Game) obj;
-		if (board == null) {
-			if (other.board != null)
-				return false;
-		} else if (!board.equals(other.board))
-			return false;
-		if (player1Score != other.player1Score)
-			return false;
-		if (player2Score != other.player2Score)
-			return false;
-		if (turn != other.turn)
-			return false;
-		return true;
+	
+	public int width() {
+		return board.width();
 	}
 }
