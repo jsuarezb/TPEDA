@@ -91,7 +91,7 @@ public class Main extends JFrame { // TODO: Todo's.
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, FileNotFoundException {
 		Game game = (new GameFactory()).getGame();		
-		Main mainWindow = new Main(game, new Minimax(), 5, 0, true, false, false);
+		Main mainWindow = new Main(game, new Minimax(), 1, 3, true, false, false);
 		mainWindow.setVisible(true);
 	}
 

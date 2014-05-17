@@ -27,8 +27,10 @@ public class Game { // TODO: Todo's.
 	
 	public void play(int x, int y) {
 		startPlay();
-		if( !board.hasAdjacents(x, y) )
+		if( !board.hasAdjacents(x, y) ){
+			finishPlay();
 			return;
+		}
 		
 		play(board.getGroup(x, y));
 	}
