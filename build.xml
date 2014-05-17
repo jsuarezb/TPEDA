@@ -1,0 +1,13 @@
+<project name="TPEDA" default="makeJar">
+	<target name="compilate">
+		<mkdir dir="bin"/>
+		<javac srcdir="src" destdir="bin"/>
+	</target>
+	<target name="makeJar" depends="compilate">
+		<jar destfile="tp.jar" basedir="bin">
+			<manifest>
+				<attribute name="Main-Class" value="view.Main"/>
+			</manifest>
+		</jar>
+	</target>
+</project>
