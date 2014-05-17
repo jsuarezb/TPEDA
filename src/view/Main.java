@@ -6,9 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
-
 import javax.swing.JFrame;
-
 import model.Game;
 import model.minimax.Minimax;
 import model.utils.GameFactory;
@@ -26,9 +24,10 @@ public class Main extends JFrame { // TODO: Todo's.
 	private int height;
 	private int time;
 	private boolean prune;
+	private boolean tree;
 	private boolean PCMode;
 
-	public Main(Game game, Minimax minimax, int height, int time, boolean prune, boolean PCMode) {
+	public Main(Game game, Minimax minimax, int height, int time, boolean prune, boolean tree, boolean PCMode) {
 		super("Azulejos");
 
 		this.game = game;
@@ -36,6 +35,7 @@ public class Main extends JFrame { // TODO: Todo's.
 		this.height = height;
 		this.time = time;
 		this.prune = prune;
+		this.tree = tree;
 		this.PCMode = PCMode;
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,7 +75,7 @@ public class Main extends JFrame { // TODO: Todo's.
 	}
 
 	public void playPC() {
-		Point mov = minimax.minimax(game, height, time, prune);
+		Point mov = minimax.minimax(game, height, time, prune, tree);
 		game.play(mov.x, mov.y);	
 		mainPanel.refresh();	
 	}
@@ -91,7 +91,7 @@ public class Main extends JFrame { // TODO: Todo's.
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, FileNotFoundException {
 		Game game = (new GameFactory()).getGame();		
-		Main mainWindow = new Main(game, new Minimax(), 1, 10, true, false);
+		Main mainWindow = new Main(game, new Minimax(), 5, 0, true, false, false);
 		mainWindow.setVisible(true);
 	}
 

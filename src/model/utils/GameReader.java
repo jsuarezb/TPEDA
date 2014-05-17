@@ -13,10 +13,6 @@ public class GameReader {
 	private int score2;
 	private char[][] board;
 	
-	/**
-	 * Reads a file containing serialized game
-	 * @param fileName path to the board file
-	 */
 	public GameReader(String fileName) throws FileNotFoundException {
 		BufferedReader reader = new BufferedReader(new FileReader(fileName));
 		
@@ -64,11 +60,6 @@ public class GameReader {
 		return height;
 	}
 	
-	/**
-	 * Get game scores
-	 * @return a binary array with current player's score
-	 * and next player's score
-	 */
 	public int getP1Score() {
 		return score1;
 	}
