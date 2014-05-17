@@ -6,10 +6,13 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
+
 import javax.swing.JFrame;
+
 import model.Game;
 import model.minimax.Minimax;
 import model.utils.GameFactory;
+import model.utils.ParametersValidator;
 
 public class Main extends JFrame { // TODO: Todo's.
 
@@ -27,7 +30,7 @@ public class Main extends JFrame { // TODO: Todo's.
 	private boolean tree;
 	private boolean PCMode;
 
-	public Main(Game game, Minimax minimax, int height, int time, boolean prune, boolean tree, boolean PCMode) {
+	public Main(Game game, Minimax minimax, int height, int time, boolean prune, boolean tree, boolean visual, boolean PCMode) {
 		super("Azulejos");
 
 		this.game = game;
@@ -36,8 +39,11 @@ public class Main extends JFrame { // TODO: Todo's.
 		this.time = time;
 		this.prune = prune;
 		this.tree = tree;
-		this.PCMode = PCMode;
 
+		if( !visual )
+			return;
+			
+		this.PCMode = PCMode;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(true);
 		Toolkit toolkit = getToolkit();
@@ -59,7 +65,7 @@ public class Main extends JFrame { // TODO: Todo's.
 		});
 	}
 
-	public void playPlayer1(int x, int y) {
+	private void playPlayer1(int x, int y) {
 		if(!game.isOver() && game.isP1Turn() && !game.isBeingPlayed() ) {
 			Point p = mainPanel.getTilePosition(x - mPanelRelX, y - mPanelRelY);
 			if( p != null ) {
@@ -74,13 +80,13 @@ public class Main extends JFrame { // TODO: Todo's.
 			playPC();
 	}
 
-	public void playPC() {
+	private void playPC() {
 		Point mov = minimax.minimax(game, height, time, prune, tree);
 		game.play(mov.x, mov.y);	
 		mainPanel.refresh();	
 	}
 
-	public void playComputer() {
+	private void playComputer() {
 		playPC();
 		try {
 			Thread.sleep(TIMER);
@@ -89,10 +95,24 @@ public class Main extends JFrame { // TODO: Todo's.
 		}
 	}
 
+	public void consolePlay() {
+		Point mov = minimax.minimax(game, height, time, prune, tree);
+		if( mov == null )
+			System.out.println("No valid movements.");
+		else
+			System.out.println("(" + mov.y + ", " + mov.x + ")");
+	}
+	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, FileNotFoundException {
-		Game game = (new GameFactory()).getGame();		
-		Main mainWindow = new Main(game, new Minimax(), 1, 3, true, false, false);
-		mainWindow.setVisible(true);
+		ParametersValidator params = new ParametersValidator(args);
+		Game game = (new GameFactory(params.getFilename())).getGame();		
+		Main mainWindow = new Main(game, new Minimax(), params.getDepth(), params.getTime(), 
+				params.hasPrune(), params.hasTree(), params.isVisual(), false);
+		
+		if( params.isVisual() )
+			mainWindow.setVisible(true);
+		else
+			mainWindow.consolePlay();
 	}
 
 }
