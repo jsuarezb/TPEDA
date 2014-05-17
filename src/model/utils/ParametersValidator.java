@@ -47,11 +47,13 @@ public class ParametersValidator {
 		if( args[4].equals("-visual") )
 			this.visual = true;
 		
-		if( args[5].equals("-prune") )
-			this.prune = true;
-		
-		if( args[5].equals("-tree") || (args.length == 7 && args[6].equals("-tree")) )
-			this.tree = true;
+		if( args.length > 5 ) {
+			if( args[5].equals("-prune") )
+				this.prune = true;
+			
+			if( args[5].equals("-tree") || (args.length == 7 && args[6].equals("-tree")) )
+				this.tree = true;
+		}
 	}
 
 	public String getFilename() {
