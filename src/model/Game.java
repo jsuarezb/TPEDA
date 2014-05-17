@@ -7,22 +7,15 @@ import model.board.Board.Tile;
 
 public class Game { // TODO: Todo's.
 	
-	// TODO: REMOVE STATIC VARS (ALL?)
-	private static final Tile[] colors = {Tile.RED, Tile.BLUE, Tile.GREEN, Tile.YELLOW, Tile.VIOLET,
-		 Tile.PINK, Tile.CYAN, Tile.LIME, Tile.ORANGE}; 
-	private static int COLORS = 4;
-	private static int ROWS = 6;
-	private static int COLS = 6;
-	
 	private static final double BONUS = 1.3;
 	private Board board;
 	private int P1Score;
 	private int P2Score;
 	private boolean P1Turn = true;
+	private boolean isBeingPlayed;
 	
-	public Game() {
-		Tile[][] tiles = randomGame(); // TODO: CHANGE FOR FILE READER.
-		board = new Board(tiles);
+	public Game(Board board, int P1Score, int P2Score) {
+		this(board, P1Score, P2Score, true);
 	}
 	
 	private Game(Board board, int P1Score, int P2Score, boolean turn) {
@@ -32,17 +25,8 @@ public class Game { // TODO: Todo's.
 		this.P1Turn = turn;
 	}
 	
-	private Tile[][] randomGame() {  //TODO: REMOVE METHOD.
-		Tile[][] tiles = new Tile[ROWS][COLS];
-		
-		for( int i = 0; i < ROWS; i++)
-			for(int j = 0; j < COLS; j++)
-				tiles[i][j] = colors[(int)(Math.random()*COLORS)];
-		
-		return tiles;
-	}
-	
 	public void play(int x, int y) {
+		startPlay();
 		if( !board.hasAdjacents(x, y) )
 			return;
 		
@@ -50,8 +34,10 @@ public class Game { // TODO: Todo's.
 	}
 	
 	public void play(Group group) {
+		startPlay();
 		score(board.play(group));
 		changeTurn();
+		finishPlay();
 	}
 	
 	private void score(int tiles){
@@ -73,6 +59,14 @@ public class Game { // TODO: Todo's.
 		}
 	}
 	
+	private void startPlay() {
+		isBeingPlayed = true;
+	}
+	
+	private void finishPlay() {
+		isBeingPlayed = false;
+	}
+	
 	private void changeTurn(){
 		this.P1Turn = !P1Turn;
 	}
@@ -83,6 +77,10 @@ public class Game { // TODO: Todo's.
 	
 	public boolean P1Won() {
 		return P1Score > P2Score;
+	}
+	
+	public boolean isBeingPlayed() {
+		return isBeingPlayed;
 	}
 	
 	public boolean isP1Turn(){

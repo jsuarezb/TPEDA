@@ -1,7 +1,9 @@
 package view;
 
 import java.awt.Point;
+
 import javax.swing.JPanel;
+
 import model.Game;
 import model.minimax.Minimax;
 import view.panel.GamePanel;
@@ -21,13 +23,13 @@ public class MainPanel extends JPanel {
 	
 	private int height;
 	
-	public MainPanel(Game game, Minimax minimax) {
+	public MainPanel(Main main, Game game, Minimax minimax) {
 		this.game = game;
 		this.minimax = minimax;
 		this.imgManager = new ImageManager();
 		this.height = CELL_SIZE * game.height();
 		setLayout(null);
-		add(infoPanel = new InfoPanel(game, imgManager, CELL_SIZE * game.width(), INFO_WIDTH, height));
+		add(infoPanel = new InfoPanel(main, game, imgManager, CELL_SIZE * game.width(), INFO_WIDTH, height));
 		add(gamePanel = new GamePanel(game, imgManager, CELL_SIZE));
 		setSize(CELL_SIZE * game.width() + INFO_WIDTH, height);
 		refresh();

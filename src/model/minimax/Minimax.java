@@ -6,7 +6,7 @@ import java.util.List;
 
 import model.Game;
 import model.board.Board.Group;
-import model.utils.FileUtils;
+import model.utils.GraphWriter;
 
 public class Minimax { // TODO: Todo's.
 
@@ -27,6 +27,8 @@ public class Minimax { // TODO: Todo's.
 					prevValue = value;
 					value = alphaBeta(curr, ++height, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, finalTime);
 					System.out.println(height);
+					if( curr.equals(prev) )
+						break;
 				}	
 				
 				value = prevValue;
@@ -53,8 +55,8 @@ public class Minimax { // TODO: Todo's.
 			}
 		}
 
-		FileUtils fileManager = new FileUtils();
-		fileManager.makeDotFile(curr);
+		GraphWriter graphWriter = new GraphWriter();
+		graphWriter.makeDotFile(curr);
 		
 		for( Node son: curr.sons ){
 			if( son.value == value )
@@ -217,5 +219,46 @@ public class Minimax { // TODO: Todo's.
 		public void setValue(double value) {
 			this.value = value;
 		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + (isPruned ? 1231 : 1237);
+			result = prime * result + ((play == null) ? 0 : play.hashCode());
+			result = prime * result + ((sons == null) ? 0 : sons.hashCode());
+			long temp;
+			temp = Double.doubleToLongBits(value);
+			result = prime * result + (int) (temp ^ (temp >>> 32));
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Node other = (Node) obj;
+			if (Double.doubleToLongBits(value) != Double
+					.doubleToLongBits(other.value))
+				return false;
+			if (isPruned != other.isPruned)
+				return false;
+			if (play == null) {
+				if (other.play != null)
+					return false;
+			} else if (!play.equals(other.play))
+				return false;
+			if (sons == null) {
+				if (other.sons != null)
+					return false;
+			} else if (!sons.equals(other.sons))
+				return false;
+			return true;
+		}
+	
 	}
 }

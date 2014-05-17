@@ -1,19 +1,11 @@
 package model.utils;
 
 import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintWriter;
-
 import model.Game;
 import model.minimax.Minimax.Node;
 
-public class FileUtils{ // TODO: Todo's.
-
-	public static BufferedReader loadFile(String fileName) throws IOException {  // TODO: REMOVE?
-		return new BufferedReader(new FileReader(fileName)); 
-	}
+public class GraphWriter {
 	
 	public void makeDotFile(Node root) {
 		try {

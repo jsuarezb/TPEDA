@@ -2,15 +2,15 @@ package model.utils;
 
 import java.io.IOException;
 
-public class MalformedBoardException extends IOException {
+public class InvalidBoardException extends IOException {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public MalformedBoardException() {
+	public InvalidBoardException() {
 		super();
 	}
 	
-	public MalformedBoardException(String error) {
+	public InvalidBoardException(String error) {
 		super(error);
 	}
 

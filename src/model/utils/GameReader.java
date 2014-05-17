@@ -21,8 +21,8 @@ public class GameReader {
 		BufferedReader reader = new BufferedReader(new FileReader(fileName));
 		
 		try {
-			width = Integer.valueOf(reader.readLine());
 			height = Integer.valueOf(reader.readLine());
+			width = Integer.valueOf(reader.readLine());
 			score1 = Integer.valueOf(reader.readLine());
 			score2 = Integer.valueOf(reader.readLine());
 			board = readBoard(reader);
@@ -37,12 +37,12 @@ public class GameReader {
 		for (int y = 0; y < height; y++) {
 			String line = reader.readLine();
 			if (line == null)
-				throw new MalformedBoardException("Missing rows");
+				throw new InvalidBoardException("Less rows than expected.");
 			
 			// String[] strRow = line.split(""); leaves an empty first element
 			char[] strRow = line.toCharArray();
 			if (strRow.length != width)
-				throw new MalformedBoardException("Wrong row width");
+				throw new InvalidBoardException("Invalid amount of columns.");
 			
 			for (int x = 0; x < width; x++) {
 				newBoard[y][x] = strRow[x];
@@ -51,7 +51,7 @@ public class GameReader {
 	
 		// There are more rows than indicated
 		if (reader.readLine() != null) 
-			throw new MalformedBoardException("Excessive rows");
+			throw new InvalidBoardException("More rows than expected.");
 		
 		return newBoard;
 	}
@@ -69,36 +69,15 @@ public class GameReader {
 	 * @return a binary array with current player's score
 	 * and next player's score
 	 */
-	public int[] getScores() {
-		return new int[]{score1, score2};
+	public int getP1Score() {
+		return score1;
+	}
+	
+	public int getP2Score() {
+		return score2;
 	}
 	
 	public char[][] getBoard() {
 		return board;
 	}
-
-	private static String print(char[][] board) {
-		String str = "";
-
-		for (char[] y : board) {
-			for (char x : y)
-				str += (x + " ");
-			str += "\n";
-		}
-		
-		return str;
-	}
-	
-	public String toString() {
-		String str = "";
-		
-		str += "\nWidth: " + width 
-				+ ", Height: " + height
-				+ ";\nScore 1: " + score1
-				+ ", Score 2: " + score2
-				+ ";\nBoard: \n" + print(board);
-		
-		return str;
-	}
-
 }
