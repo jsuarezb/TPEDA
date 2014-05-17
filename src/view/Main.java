@@ -61,7 +61,7 @@ public class Main extends JFrame {
 						main.mainPanel.refresh();
 					}*/
 				} else if(!main.game.isOver() ) {	
-					Point mov = main.minimax.minimax(Main.this.game);
+					Point mov = main.minimax.minimax(Main.this.game, true, 55);
 					main.game.play(mov.x, mov.y);	
 					main.mainPanel.refresh();		
 				}
