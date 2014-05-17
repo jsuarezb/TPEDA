@@ -7,15 +7,17 @@ import model.minimax.Minimax.Node;
 
 public class GraphWriter {
 	
+	private int nId = 0;
+	
 	public void makeDotFile(Node root) {
 		try {
 			PrintWriter writer = new PrintWriter("tree.dot", "UTF-8");
 			
 			writer.println("digraph minimaxTree {");
-			writer.println("node" + root.hashCode() + " [label=\"START " + root.getValue() + 
+			writer.println("node" + nId + " [label=\"START " + root.getValue() + 
 						   "\", shape=\"box\", style=\"filled\", color=\"red\"];");
 			
-			addNodeSonsLines(writer, root);
+			addNodeSonsLines(writer, root, nId++ );
 			
 			writer.println("}");
 			
@@ -25,12 +27,11 @@ public class GraphWriter {
 		}
 	}
 	
-	private void addNodeSonsLines(PrintWriter writer, Node node) {
+	private void addNodeSonsLines(PrintWriter writer, Node node, int parentId ) {
 		Game game = node.getGame();
 		double value = node.getValue();
 		boolean turn = !game.isP2Turn();
 		boolean noSelected = true;
-		int hash = node.hashCode();
 		
 		for( Node son: node.getSons() ) {
 			Point p = son.getPlay();
@@ -52,12 +53,13 @@ public class GraphWriter {
 			else
 				shape = "oval";
 			
-			writer.println("node" + son.hashCode() + " [label=\"" + label + "\", " + 
+			writer.println("node" + nId + " [label=\"" + label + "\", " + 
 							"shape=\"" + shape + "\", style=\"filled\", color=\"" + color + "\"];");
-			writer.println("node" + hash + " -> node" + son.hashCode() + ";");
+			writer.println("node" + parentId + " -> node" + nId++ + ";");
+			
 			
 			if( !son.isPruned() )
-				addNodeSonsLines(writer, son);
+				addNodeSonsLines(writer, son, nId - 1);
 		}
 	}
 }

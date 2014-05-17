@@ -12,24 +12,25 @@ public class ParametersValidator {
 	
 	public ParametersValidator(String[] args){
 		this.args = args;
+		validate();
 	}
 	
 	public void validate() {
 		
-		if( args.length < 5 || args.length > 7 )
+		if( args.length < 5 || args.length > 8 )
 			throw new InvalidArgumentsException();
 		if( !args[0].equals("-file") )
 			throw new InvalidArgumentsException();
 		if( !args[1].endsWith(".txt") )
 			throw new InvalidArgumentsException();
-		if( !args[2].equals("-maxtime") || !args[2].equals("-depth") )
+		if( !args[2].equals("-maxtime") && !args[2].equals("-depth") )
 			throw new InvalidArgumentsException();
 		if( !args[3].matches("[-+]?\\d*\\.?\\d+") )
 			throw new InvalidArgumentsException();
-		if( !args[4].equals("-visual") || !args[4].equals("-console") )
+		if( !args[4].equals("-visual") && !args[4].equals("-console") )
 			throw new InvalidArgumentsException();
 		if( args.length == 6 )
-			if( !args[5].equals("-prune") || !args[5].equals("-tree") )
+			if( !args[5].equals("-prune") && !args[5].equals("-tree") )
 				throw new InvalidArgumentsException();
 		if( args.length == 7 )
 			if( !args[5].equals("-prune") || !args[6].equals("-tree") )
@@ -49,7 +50,7 @@ public class ParametersValidator {
 		if( args[5].equals("-prune") )
 			this.prune = true;
 		
-		if( args[5].equals("-tree") || args[6].equals("-tree") )
+		if( args[5].equals("-tree") || (args.length == 7 && args[6].equals("-tree")) )
 			this.tree = true;
 	}
 
