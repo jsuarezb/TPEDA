@@ -3,23 +3,60 @@ package model.minimax;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+
 import model.Game;
 import model.board.Board.Group;
+import model.utils.FileUtils;
 
 public class Minimax { // TODO: Todo's.
 
-	private static final int HEIGHT = 10; //TODO REMOVE.
-
-	public Point minimax(Game game, boolean prune, long time) {       
-		Node root = new Node(game, HEIGHT);
+	public Point minimax(Game game, int height, int time, boolean prune) {       				
+		Node curr = new Node(game);
 		double value;
-		if(prune)
-			value = alphaBeta(root, HEIGHT, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-		else
-			value = minimax(root, HEIGHT);
+		
+		if(prune) {			
+			value = alphaBeta(curr, height, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Long.MAX_VALUE);
+			
+			if( time != 0 ){
+				long finalTime = System.currentTimeMillis()  + time*1000;
+				double prevValue = value;
+				Node prev = curr;
+				
+				while( System.currentTimeMillis() < finalTime ) {
+					prev = curr;
+					prevValue = value;
+					value = alphaBeta(curr, ++height, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, finalTime);
+					System.out.println(height);
+				}	
+				
+				value = prevValue;
+				curr = prev;
+			}
+		}
+		else {
+			value = minimax(curr, height, Long.MAX_VALUE);
+			
+			if( time != 0 ){
+				long finalTime = System.currentTimeMillis()  + time*1000;
+				double prevValue = value;
+				Node prev = curr;
+				
+				while( System.currentTimeMillis() < finalTime ) {
+					prev = curr;
+					prevValue = value;
+					value = minimax(curr, ++height, finalTime);
+					System.out.println(height);
+				}	
+				
+				value = prevValue;
+				curr = prev;
+			}
+		}
 
-		for( Node son: root.sons ){
-			System.out.println("son: " + son.value + " value: " + value);
+		FileUtils fileManager = new FileUtils();
+		fileManager.makeDotFile(curr);
+		
+		for( Node son: curr.sons ){
 			if( son.value == value )
 				return son.play;
 		}
@@ -27,33 +64,59 @@ public class Minimax { // TODO: Todo's.
 		throw new NonValidPlayException();
 	}
 
-	private static double minimax(Node node, int height) {
+	private static double minimax(Node node, int height, long finalTime) {
+		if( System.currentTimeMillis() > finalTime ) // Breaks the recursive call.
+			return 0;
+		
 		Game game = node.getGame();    
 
-		if( height == 0 || game.isOver() ) {
-			node.calculateValue();
-			System.out.println("Leaf");
+		if( game.isOver() ) {
+			node.gameOverValue();
 			return node.value;
 		}
 
-		List<Group> groups = game.getGroups();
+		if( height == 0 ) {
+			node.leafValue();
+			return node.value;
+		}
 
+		double value;
+		
+		if( game.isP1Turn() )
+			value = Double.POSITIVE_INFINITY;
+		else
+			value = Double.NEGATIVE_INFINITY;
+		
+		List<Group> groups = game.getGroups();
+		
 		for(Group group: groups) {
 			Game gameCopy = game.clone();
 			gameCopy.play(group);
-			Node newNode = new Node(gameCopy, group.getPoint(), height - 1);
+			Node newNode = new Node(gameCopy, group.getPoint());
 			node.addSon(newNode);
+			if( game.isP1Turn() )
+				value = Math.min(value, minimax(newNode, height - 1, finalTime));
+			else
+				value = Math.max(value, minimax(newNode, height - 1, finalTime));
 		}
 
-		node.calculateValue(); 
-		return node.value;
+		node.setValue(value); 
+		return value;
 	}
 
-	private double alphaBeta(Node node, int height, double alpha, double beta){
+	private double alphaBeta(Node node, int height, double alpha, double beta, long finalTime){
+		if( System.currentTimeMillis() > finalTime ) // Breaks the recursive call.
+			return 0;
+		
 		Game game = node.getGame();    
 
-		if(height == 0 || game.isOver()){
-			node.calculateValue();
+		if( game.isOver() ) {
+			node.gameOverValue();
+			return node.value;
+		}
+
+		if( height == 0 ) {
+			node.leafValue();
 			return node.value;
 		}
 
@@ -62,84 +125,51 @@ public class Minimax { // TODO: Todo's.
 		for(Group group: groups) {
 			Game gameCopy = game.clone();
 			gameCopy.play(group);
-			Node newNode = new Node(gameCopy, group.getPoint(), height - 1);
+			Node newNode = new Node(gameCopy, group.getPoint());
 			node.addSon(newNode);
-		}
-
-		if(game.isP2Turn()){
-			for(Node son: node.sons){
-				alpha = Math.max(alpha, alphaBeta(son, height - 1, alpha, beta));
+			
+			if(game.isP1Turn()){
+				beta = Math.min(beta, alphaBeta(newNode, height - 1, alpha, beta, finalTime));
+				if(beta <= alpha) {
+					node.setValue(beta);
+					node.isPruned = true;
+					return beta;
+				}
+			} else {
+				alpha = Math.max(alpha, alphaBeta(newNode, height - 1, alpha, beta, finalTime));
 				if(beta <= alpha){
 					node.setValue(alpha); 
+					node.isPruned = true;
 					return alpha;
 				}
 			}
-			node.setValue(alpha); 
-			return alpha;
-		}else{
-			for(Node son: node.sons){
-				beta = Math.min(beta, alphaBeta(son, height - 1, alpha, beta));
-				if(beta <= alpha) {
-					node.setValue(beta);
-					return beta;
-				}
-			}
+		}
+		
+		if( game.isP1Turn() ) {
 			node.setValue(beta); 
 			return beta;
+		} else {
+			node.setValue(alpha); 
+			return alpha;
 		}
 	}
-
-	private static class Node {
+	
+	public static class Node {
 		Game game;
 		Point play;
 		double value;
 		List<Node> sons;
-		int height;
+		boolean isPruned;
 
-		public Node(Game game, int height) {
-			this(game, null, height);
+		public Node(Game game) {
+			this(game, null);
 		}
 
-		public Node(Game game, Point play, int height) {
+		public Node(Game game, Point play) {
 			this.game = game;
 			this.play = play;
-			this.height = height;
 			sons = new ArrayList<Node>();
 		}
-
-		public void calculateValue() {
-			if( game.isOver() ) {
-				gameOverValue();
-				return;
-			}
-
-			if( height == 0 ) {
-				leafValue();
-				return;
-			}
-
-			if( game.isP1Turn() )
-				minValue();
-			else
-				maxValue();
-		}
-
-		private void maxValue() {
-			value = Double.NEGATIVE_INFINITY;
-
-			for( Node son: sons )
-				value = Math.max(value, minimax(son, height - 1));
-		}
-
-		private void minValue() {
-			value = Double.POSITIVE_INFINITY;
-
-			for( Node son: sons )
-				value = Math.min(value, minimax(son, height - 1));
-		}
-
-
-
 
 		private void gameOverValue() {
 			if( game.isP1Turn() )
@@ -166,6 +196,22 @@ public class Minimax { // TODO: Todo's.
 
 		public Game getGame() {
 			return game;
+		}
+		
+		public boolean isPruned() {
+			return isPruned;
+		}
+		
+		public List<Node> getSons() {
+			return sons;
+		}
+		
+		public Point getPlay() {
+			return play;
+		}
+		
+		public double getValue() {
+			return value;
 		}
 		
 		public void setValue(double value) {

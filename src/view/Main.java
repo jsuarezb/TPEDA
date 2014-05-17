@@ -5,13 +5,11 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JFrame;
-
 import model.Game;
 import model.minimax.Minimax;
 
-public class Main extends JFrame {
+public class Main extends JFrame { // TODO: Todo's.
 	private static final long serialVersionUID = 1L;
 
 	private MainPanel mainPanel;
@@ -61,7 +59,7 @@ public class Main extends JFrame {
 						main.mainPanel.refresh();
 					}*/
 				} else if(!main.game.isOver() ) {	
-					Point mov = main.minimax.minimax(Main.this.game, true, 55);
+					Point mov = main.minimax.minimax(Main.this.game, 3, 0, true);
 					main.game.play(mov.x, mov.y);	
 					main.mainPanel.refresh();		
 				}

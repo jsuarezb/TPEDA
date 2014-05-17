@@ -7,7 +7,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 import model.Game;
 
-public class ScorePanel extends JPanel {
+public class ScorePanel extends JPanel { // TODO: Beautify if we have time.
 	private static final long serialVersionUID = 1L;
 	
 	private Game game;

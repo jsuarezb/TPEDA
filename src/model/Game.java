@@ -11,8 +11,8 @@ public class Game { // TODO: Todo's.
 	private static final Tile[] colors = {Tile.RED, Tile.BLUE, Tile.GREEN, Tile.YELLOW, Tile.VIOLET,
 		 Tile.PINK, Tile.CYAN, Tile.LIME, Tile.ORANGE}; 
 	private static int COLORS = 4;
-	private static int ROWS = 8;
-	private static int COLS = 8;
+	private static int ROWS = 6;
+	private static int COLS = 6;
 	
 	private static final double BONUS = 1.3;
 	private Board board;
