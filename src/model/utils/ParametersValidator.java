@@ -1,6 +1,6 @@
 package model.utils;
 
-public class ParametersValidator {
+public class ParametersValidator { //TODO: Restrict tree to console.
 
 	private String[] args;
 	private String filename;

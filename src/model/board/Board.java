@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Board { // TODO: Todo's.
+public class Board {
 	
 	private static final int[][] moves = new int[][]{ {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 	private Tile[][] board;
@@ -257,16 +257,6 @@ public class Board { // TODO: Todo's.
 		return result;
 	}
 	
-	public String toString() { // TODO: REMOVE.
-		String ans = "";
-		for( int y = 0; y < board.length; y++ ) {
-			for( int x = 0; x < board[0].length; x++ )
-				ans += board[y][x].getChar() + " ";
-			ans += "\n";
-		}
-		return ans;
-	}
-	
 	public class Group {
 
 		private Set<Point> points = new HashSet<Point>();
@@ -300,10 +290,6 @@ public class Board { // TODO: Todo's.
 		
 		public Point getPoint() {
 			return firstPoint;
-		}
-		
-		public String toString() { // TODO: Remove.
-			return "Group: " + getPoint() + " Color: " + tile;
 		}
 	}
 

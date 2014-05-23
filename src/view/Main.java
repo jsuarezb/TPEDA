@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import model.Game;
 import model.minimax.Minimax;
+import model.minimax.Node;
 import model.utils.FileFactory;
 import model.utils.GameFactory;
 import model.utils.ParametersValidator;
@@ -22,24 +23,17 @@ public class Main extends JFrame { // TODO: Todo's. Beautify code and add game(f
 	private static final int mPanelRelY = 30;
 	private static final long TIMER = 1000;
 	private static final boolean PCMODE = false;
+	public static boolean P2ISMAX = true;
 
 	private Game game;
 	private MainPanel mainPanel;
 	private Minimax minimax;
-	private int height;
-	private int time;
-	private boolean prune;
-	private boolean tree;
 
-	public Main(Game game, Minimax minimax, int height, int time, boolean prune, boolean tree, boolean visual) {
+	public Main(Game game, boolean visual, Minimax minimax) {
 		super("Azulejos");
 
 		this.game = game;
 		this.minimax = minimax;
-		this.height = height;
-		this.time = time;
-		this.prune = prune;
-		this.tree = tree;
 
 		if( !visual )
 			return;
@@ -64,9 +58,9 @@ public class Main extends JFrame { // TODO: Todo's. Beautify code and add game(f
 			}
 		});
 	}
-
+	
 	private void playPlayer1(int x, int y) {
-		if(!game.isOver() && game.isP1Turn() && !game.isBeingPlayed() ) {
+		if(!game.isOver() && /*game.isP1Turn() &&*/ !game.isBeingPlayed() ) {
 			Point p = mainPanel.getTilePosition(x - mPanelRelX, y - mPanelRelY);
 			if( p != null ) {
 				game.play(p.x, p.y);	
@@ -81,7 +75,7 @@ public class Main extends JFrame { // TODO: Todo's. Beautify code and add game(f
 	}
 
 	private void playPC() {
-		Point mov = minimax.minimax(game, height, time, prune, tree);
+		Point mov = minimax.minimax(game);
 		game.play(mov.x, mov.y);	
 		mainPanel.refresh();	
 	}
@@ -96,7 +90,7 @@ public class Main extends JFrame { // TODO: Todo's. Beautify code and add game(f
 	}
 
 	public void consolePlay() {
-		Point mov = minimax.minimax(game, height, time, prune, tree);
+		Point mov = minimax.minimaxByConsole(game);
 		if( mov == null )
 			System.out.println("No valid movements.");
 		else
@@ -105,16 +99,21 @@ public class Main extends JFrame { // TODO: Todo's. Beautify code and add game(f
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, FileNotFoundException {
 		ParametersValidator params = new ParametersValidator(args);
-		
 		(new FileFactory(6, 6, 4, 0, 0)).getRandomFile();
 		Game game = (new GameFactory(params.getFilename())).getGame();		
-		Main mainWindow = new Main(game, new Minimax(), params.getDepth(), params.getTime(), 
-				params.hasPrune(), params.hasTree(), params.isVisual());
+		
+		Main mainWindow = new Main(game, params.isVisual(), 
+				new Minimax(params.getDepth(), params.getTime(), params.hasTree()));
+		
+		if( params.hasPrune() )
+			Node.prune = true;
 		
 		if( params.isVisual() )
 			mainWindow.setVisible(true);
-		else
+		else {
+			P2ISMAX = false;
 			mainWindow.consolePlay();
+		}
 	}
 
 }

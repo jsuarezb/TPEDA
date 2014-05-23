@@ -3,7 +3,7 @@ package model.utils;
 import java.awt.Point;
 import java.io.PrintWriter;
 import model.Game;
-import model.minimax.Minimax.Node;
+import model.minimax.Node;
 
 public class GraphWriter {
 	
@@ -46,6 +46,8 @@ public class GraphWriter {
 			}
 			else
 				color = "blue";
+			if( son.getGame().isOver() )
+				color = "green";
 			
 			String shape;
 			if( turn )

@@ -5,9 +5,10 @@ import model.board.Board;
 import model.board.Board.Group;
 import model.board.Board.Tile;
 
-public class Game { // TODO: Todo's.
+public class Game {
 	
 	private static final double BONUS = 1.3;
+	
 	private Board board;
 	private int P1Score;
 	private int P2Score;
