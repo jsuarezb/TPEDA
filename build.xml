@@ -1,6 +1,9 @@
 <project name="TPEDA" default="makeJar">
 	<target name="compilate">
 		<mkdir dir="bin"/>
+		<copy todir="bin/resources">
+			<fileset dir="resources"/>
+		</copy>
 		<javac srcdir="src" destdir="bin"/>
 	</target>
 	<target name="makeJar" depends="compilate">
