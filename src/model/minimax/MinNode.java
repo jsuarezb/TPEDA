@@ -2,7 +2,6 @@ package model.minimax;
 
 import java.awt.Point;
 import java.util.List;
-
 import model.Game;
 import model.board.Board.Group;
 

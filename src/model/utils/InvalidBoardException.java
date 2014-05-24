@@ -13,5 +13,4 @@ public class InvalidBoardException extends IOException {
 	public InvalidBoardException(String error) {
 		super(error);
 	}
-
 }

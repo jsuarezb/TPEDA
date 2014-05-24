@@ -1,17 +1,16 @@
 package view;
 
 import java.awt.Point;
-
 import javax.swing.JPanel;
-
 import model.Game;
 import model.minimax.Minimax;
 import view.panel.GamePanel;
 import view.panel.InfoPanel;
 
 public class MainPanel extends JPanel {
+	
 	private static final long serialVersionUID = 1L;
-
+	
 	private static final int CELL_SIZE = 40;
 	private static final int INFO_WIDTH = 300;
 	

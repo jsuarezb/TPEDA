@@ -1,6 +1,6 @@
 package model.utils;
 
-public class ParametersValidator { //TODO: Restrict tree to console.
+public class ParametersValidator {
 
 	private String[] args;
 	private String filename;
@@ -10,7 +10,7 @@ public class ParametersValidator { //TODO: Restrict tree to console.
 	private boolean prune;
 	private boolean tree;
 	
-	public ParametersValidator(String[] args){
+	public ParametersValidator(String[] args) {
 		this.args = args;
 		validate();
 	}
@@ -38,7 +38,7 @@ public class ParametersValidator { //TODO: Restrict tree to console.
 		
 		this.filename = args[1];
 		
-		if( args[2].equals("-maxtime") ){
+		if( args[2].equals("-maxtime") ) {
 			this.time = Integer.valueOf(args[3]);
 		} else {
 			this.depth = Integer.valueOf(args[3]);
@@ -54,6 +54,9 @@ public class ParametersValidator { //TODO: Restrict tree to console.
 			if( args[5].equals("-tree") || (args.length == 7 && args[6].equals("-tree")) )
 				this.tree = true;
 		}
+		
+		if( visual && tree )
+			throw new InvalidArgumentsException();
 	}
 
 	public String getFilename() {

@@ -4,13 +4,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-
 import javax.swing.JPanel;
 import view.Main;
 import view.button.Player2Button;
 import model.Game;
 
-public class ScorePanel extends JPanel { // TODO: Beautify if we have time.
+public class ScorePanel extends JPanel { 
 	private static final long serialVersionUID = 1L;
 	
 	private Game game;

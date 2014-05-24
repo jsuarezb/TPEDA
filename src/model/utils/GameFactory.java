@@ -3,7 +3,6 @@ package model.utils;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
-
 import model.Game;
 import model.board.Board;
 import model.board.Board.Tile;

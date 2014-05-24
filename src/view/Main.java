@@ -6,9 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
-
 import javax.swing.JFrame;
-
 import model.Game;
 import model.minimax.Minimax;
 import model.minimax.Node;
@@ -99,7 +97,7 @@ public class Main extends JFrame { // TODO: Todo's. Beautify code and add game(f
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, FileNotFoundException {
 		ParametersValidator params = new ParametersValidator(args);
-		(new FileFactory(6, 6, 4, 0, 0)).getRandomFile();
+		(new FileFactory(10, 10, 5, 0, 0)).getRandomFile();
 		Game game = (new GameFactory(params.getFilename())).getGame();		
 		
 		Main mainWindow = new Main(game, params.isVisual(), 

@@ -2,12 +2,15 @@ package model.minimax;
 
 import java.awt.Point;
 import java.util.List;
-
 import model.Game;
 import model.board.Board.Group;
 
 public class MaxNode extends Node {
 
+	public MaxNode(Game game) {
+		super(game, null);
+	}
+	
 	protected MaxNode(Game game, Point play) {
 		super(game, play);
 	}

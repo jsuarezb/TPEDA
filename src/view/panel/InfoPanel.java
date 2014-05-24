@@ -2,9 +2,7 @@ package view.panel;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
 import javax.swing.JPanel;
-
 import model.Game;
 import view.ImageManager;
 import view.Main;

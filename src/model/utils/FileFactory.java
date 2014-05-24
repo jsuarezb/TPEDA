@@ -1,7 +1,6 @@
 package model.utils;
 
 import java.io.PrintWriter;
-
 import model.board.Board.Tile;
 
 public class FileFactory {

@@ -43,14 +43,14 @@ public class Minimax {
 	private Node createByTime(Game game) {
 		long finalTime = System.currentTimeMillis()  + time*1000;		
 		
-		Node curr = new RootNode(game);		
+		Node curr = new MaxNode(game);		
 		curr.minimax(depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Long.MAX_VALUE);
 		Node prev = curr.clone();
 		int height = 2;
 
 		while( System.currentTimeMillis() < finalTime ) {
 			prev = curr.clone();
-			curr = new RootNode(game);
+			curr = new MaxNode(game);
 			curr.minimax(height++, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, finalTime);
 			if( curr.height() == prev.height() )
 				break;
@@ -63,7 +63,7 @@ public class Minimax {
 		if( time != 0 )
 			return createByTime(game);
 		
-		Node root = new RootNode(game);		
+		Node root = new MaxNode(game);		
 		root.minimax(depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Long.MAX_VALUE);
 	
 		return root;

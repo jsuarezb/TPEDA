@@ -3,9 +3,7 @@ package view.panel;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
-
 import javax.swing.JPanel;
-
 import model.Game;
 import model.board.Board.Tile;
 import view.ImageManager;
