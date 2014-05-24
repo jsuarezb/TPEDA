@@ -55,6 +55,10 @@ public class ParametersValidator {
 				this.tree = true;
 		}
 		
+		if( depth <= 0 )
+			throw new InvalidArgumentsException();
+		if( time < 0 )
+			throw new InvalidArgumentsException();
 		if( visual && tree )
 			throw new InvalidArgumentsException();
 	}

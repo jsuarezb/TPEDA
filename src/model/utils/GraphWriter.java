@@ -46,7 +46,7 @@ public class GraphWriter {
 			writeGraphNode(writer, son, color);
 			writeGraphEdge(writer, parentId );			
 			
-			//if( !son.isPruned() )
+			if( !son.isPruned() )
 				addNodeSonsLines(writer, son, nId - 1);
 		}
 	}
