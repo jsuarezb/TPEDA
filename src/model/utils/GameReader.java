@@ -41,6 +41,9 @@ public class GameReader {
 				throw new InvalidBoardException("Invalid amount of columns.");
 			
 			for (int x = 0; x < width; x++) {
+				if (isValidCharacter(strRow[x]))
+					throw new InvalidBoardException("Invalid character");
+				
 				newBoard[y][x] = strRow[x];
 			}
 		}
@@ -50,6 +53,10 @@ public class GameReader {
 			throw new InvalidBoardException("More rows than expected.");
 		
 		return newBoard;
+	}
+	
+	private boolean isValidCharacter(char c) {
+		return Character.isDigit(c) || c == ' ';
 	}
 	
 	public int getWidth() {
